@@ -1,3 +1,18 @@
+---
+layout:     post
+title:      如何让idea用得更顺手
+subtitle:   idea快捷键备忘录
+date:       2023-4-5
+author:     lily
+header-img: img/helper-tool.jpg
+catalog: 	 true
+tags:
+- iOS
+- 定时器
+---
+
+
+
 <a name="U7I35"></a>
 # Idea快捷键
 | **快捷键组合** | **实现效果** |
