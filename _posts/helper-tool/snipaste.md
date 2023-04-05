@@ -1,0 +1,26 @@
+<a name="i3dzb"></a>
+### how can i get a image?
+
+<a name="RDONa"></a>
+### Paste images as topmost floating windows
+
+- The source (in the clipboard) could be
+   - Image
+   - Plain text
+   - HTML text
+   - Color info text
+   - Image files: PNG, JPG, BMP, TGA, ICO, TIFF and **GIF**
+- Supported operations
+   - Zoom (mouse scroll or +/-)<br />or set speed for GIF
+   - Rotate (1/2)<br />or jump to previous/next frame for GIF
+   - Flip (3/4)
+   - Set transparency (Ctrl + mouse scroll or Ctrl + +/-)
+   - Mouse click-through (X, and use F4 to cancel)
+   - Image editing (Space)
+   - Thumbnail mode (Shift + Double click)
+   - Hide (Double click)
+   - ...
+- Color picker (Alt)
+- Drag & drop
+- **Grouping**
+- **Auto backup & restore**
