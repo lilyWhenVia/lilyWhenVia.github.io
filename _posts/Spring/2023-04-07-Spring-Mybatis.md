@@ -13,6 +13,7 @@
 1. [Mybatis](#mybatis)
 2. [数据库整体概念](#数据库整体概念)
 3. [Mybatis连接数据库](#mybatis连接数据库)
+      1. [springboot数据库连接配置](#springboot数据库连接配置)
 4. [xml配置开发](#xml配置开发)
 5. [使用注解开发](#使用注解开发)
    1. [配置类configClass](#配置类configclass)
@@ -36,6 +37,34 @@
 > 数据库连接池的作用就是维护数据库连接，减少创建和删除数据库连接的操作，来达到减少数据访问时耗的目的。
 
 # Mybatis连接数据库
+
+  ### springboot数据库连接配置
+  > 使用SpringBoot连接MySQL数据库需要以下几个依赖：
+
+> spring-boot-starter-data-jpa：用于数据访问以及仓库的存储和检索。
+> 
+> spring-boot-starter-jdbc：提供了对JDBC的支持，以便创建和使用JdbcTemplate等对象。
+> 
+> mysql-connector-java：MySQL JDBC 驱动程序。
+> 
+> spring-boot-starter-web：提供了对Web的支持，包括RESTful、WebSocket等。
+> 
+> spring-boot-starter-test：提供了对测试的支持，包括JUnit、Mockito等。
+> 
+> HikariCP：数据库连接池。
+> 
+> 这些依赖之间的关系如下：
+> 
+> spring-boot-starter-data-jpa依赖于spring-boot-starter-jdbc和hibernate-core；hibernate-core又依赖于javax.persistence-api和antlr。
+> 
+> spring-boot-starter-jdbc依赖于spring-jdbc，spring-jdbc又依赖于spring-core和spring-beans。
+> 
+> mysql-connector-java是mysql数据库的Java连接器。
+> 
+> spring-boot-starter-web依赖于spring-boot-starter和spring-webmvc。
+> 
+> HikariCP作为数据库连接池起到了管理、创建和回收连接的作用。它不需要其他依赖，但需要与具体的数据库驱动程序兼容。
+> 
 # xml配置开发
 
 1. 配置文件
