@@ -11,14 +11,40 @@
 目录
 
 1. [Mybatis](#mybatis)
-2. [数据库整体概念](#数据库整体概念)
-3. [Mybatis连接数据库](#mybatis连接数据库)
+2. [整合spring的使用](#整合spring的使用)
+3. [数据库整体概念](#数据库整体概念)
+4. [Mybatis连接数据库](#mybatis连接数据库)
       1. [springboot数据库连接配置](#springboot数据库连接配置)
-4. [xml配置开发](#xml配置开发)
-5. [使用注解开发](#使用注解开发)
+5. [xml配置开发](#xml配置开发)
+6. [使用注解开发](#使用注解开发)
    1. [配置类configClass](#配置类configclass)
-6. [整合后的使用规则](#整合后的使用规则)
+7. [整合后的使用规则](#整合后的使用规则)
 ---
+
+# 整合spring的使用
+1. pom依赖导入
+   ```xml
+      <dependency>
+        <artifactId>mybatis</artifactId>
+        <groupId>org.mybatis</groupId>
+        <version>3.5.2</version>
+      </dependency>
+    
+      <dependency>
+        <groupId>org.mybatis</groupId>
+        <artifactId>mybatis-spring</artifactId>
+        <version>2.0.2</version>
+      </dependency>
+    
+      <dependency>
+        <groupId>org.mybatis.spring.boot</groupId>
+        <artifactId>mybatis-spring-boot-starter</artifactId>
+        <version>3.0.1</version>
+    </dependency>
+      
+   ```
+
+
 # 数据库整体概念
 > 数据库
 > 数据库是一个容器，包含了很多数据，当然这些数据可能存在不同的小容器(表)里面。
@@ -170,3 +196,4 @@ spring.datasource.password=root
 1. 在mapper接口中定义sql方法，使用注解定义sql语句
 2. 在注册Spring配置类时加载Mybatis配置类获取ctp对象
 3. 用ctp对象获取相关Bean，再调用具体sql查询方法
+
