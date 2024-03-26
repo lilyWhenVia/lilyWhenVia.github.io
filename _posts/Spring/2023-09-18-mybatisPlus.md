@@ -1,0 +1,4 @@
+# mybatis-plus在springboot中的使用
+
+1. 在继承和实现mybatis-plus自带的baseMapper等接口时，注意将springboot中的实体类以及mapper接口注入到springboot容器中，因为mybtais-plus的调用依赖springboot框架。如果不事先注入bean，会导致mybatis框架无法找到对应的实体类（domain）或者baseMapper（mybatis在调用各种方法时会调用basemapper）。
+2. 注意数据库驱动的url没有写错。
