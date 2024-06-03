@@ -64,3 +64,5 @@ SpringBoot默认的内嵌容器是Tomcat，也就是我们的程序实际上是�
      accept-count: 10
 ```
 使用apifox模拟100个请求访问
+
+# 包扫描配置

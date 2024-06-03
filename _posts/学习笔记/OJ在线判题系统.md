@@ -1,0 +1,859 @@
+设计流程
+
+1. 调研相关系统
+2. 项目模块设计
+
+![](https://cdn.nlark.com/yuque/0/2024/jpeg/1238904/1712484030849-4692108a-87bc-4262-8b9a-de47d5b945d7.jpeg)
+
+3. 项目流程设计/时序图
+4. 库表设计
+<a name="pXdwR"></a>
+# 库表设计
+题目表
+
+![](https://cdn.nlark.com/yuque/0/2024/jpeg/1238904/1712508989645-0bc5a263-9e56-4347-94c0-b17a3370cb11.jpeg)
+
+<a name="euNG7"></a>
+# 业务代码代码设计注意事项
+
+1. 定义枚举类与定义常量标识的场景
+   1. 枚举类可以拥有更多属性和方法
+      1. 调用得到所有的枚举值的特定属性
+2. id生成规则  
+   1. tableId(Type = ASSIGN_ID)
+   2. 非连续自增
+3. 23年idea自动reload代码（不重启
+4. 传递参数的类设置字段类使用包装类，可以不传递该参数，没有默认值
+   1. int 默认值0
+   2. Integer 没有默认值
+5. wrapper的like方法，true时拼接查询条件
+6. 登录态过期时间自定义（session设置时间）
+
+<a name="gmoET"></a>
+## ProcessBuilder进程管理控制
+```java
+public void getProcessByCmd(String logFilePath, String codeFilePath) {
+        // TODO
+        ProcessBuilder pb = new ProcessBuilder("java","Main", "1", "2");
+    // 暂时性更改
+        System.setProperty("console.encoding", "UTF-8");
+//        Map<String, String> env = pb.environment();
+//        env.put("VAR1", "myValue");
+        File file = new File(codeFilePath);
+        pb.directory(file);
+        String userLogFile = logFilePath + File.separator + "myLog";
+        File codeLog = new File(userLogFile);
+        pb.redirectErrorStream(true);
+        pb.redirectOutput(ProcessBuilder.Redirect.appendTo(codeLog));
+        try {
+            Process p = pb.start();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+```
+在 Java 中，你可以通过指定一个已存在的目录来设置进程的工作目录，而不是新建一个文件。这可以通过 ProcessBuilder 类的 directory 方法来实现。<br />下面是一个简单的示例，演示了如何指定一个已存在的目录作为进程的工作目录：
+
+```java
+import java.io.File;
+import java.io.IOException;
+
+public class Main {
+    public static void main(String[] args) {
+        // 指定已存在的目录作为工作目录
+        File workingDirectory = new File("/path/to/your/existing/directory");
+
+        // 创建 ProcessBuilder 对象并设置工作目录
+        ProcessBuilder pb = new ProcessBuilder("myCommand", "myArg1", "myArg2");
+        pb.directory(workingDirectory);
+
+        // 后续操作...
+    }
+}
+```
+
+在这个示例中，我们首先创建了一个 File 对象来表示已存在的目录，然后将其作为参数传递给 ProcessBuilder 的 directory 方法。这样就可以确保新进程在执行命令时使用指定的已存在目录作为工作目录，而不会创建一个新的文件。
+
+通过这种方式，你可以明确指定进程的工作目录，以确保命令执行时所处的环境符合预期。
+
+环境参数影响<br />这些环境变量在执行外部命令时可以影响命令的参数构成和进程的行为：
+
+1.  **影响命令的参数构成**: 
+   - 通过 `env.put("VAR1", "myValue");` 和 `env.put("VAR2", env.get("VAR1") + "suffix");` 这样的代码，你可以向进程的环境变量中添加自定义的变量。这些变量可以在执行外部命令时被读取和使用，从而影响命令的参数构成。例如，命令可能会根据环境变量的不同而执行不同的逻辑或操作。
+2.  **影响进程的行为**: 
+   - 进程的环境变量可以影响进程的行为和执行结果。某些命令可能会根据特定的环境变量来改变其行为，或者使用环境变量中的值来进行计算或决策。因此，通过设置环境变量，你可以对进程的行为产生影响，例如指定特定的工作目录、配置参数或提供必要的信息。
+
+总的来说，环境变量的设置可以使你在执行外部命令时灵活地控制命令的参数构成和影响进程的行为，从而实现定制化的功能和操作。
+<a name="KPbjo"></a>
+## 编码
+
+1. 查看控制台编码
+```bash
+chcp 
+```
+
+使用 `chcp` 命令来临时更改控制台的代码页。要将控制台的代码页设置为 UTF-8，可以执行以下命令：
+```
+chcp 65001
+```
+
+执行此命令后，控制台的代码页将被设置为 UTF-8，从而允许正确显示和处理 UTF-8 编码的文本。请注意，这种更改是临时的，只在当前会话中有效。若要永久更改控制台的代码页，请参考之前提供的注册表编辑方法。
+<a name="NeuVp"></a>
+#### 永久更改控制台编码
+在 Windows 中，可以通过更改注册表来永久设置控制台的默认代码页为 UTF-8。请按照以下步骤操作：
+
+1.  打开注册表编辑器： 
+   - 在 Windows 中，按下 `Win + R` 打开运行对话框，然后输入 `regedit` 并按 Enter 键。
+2.  导航到控制台设置的位置： 
+   - 在注册表编辑器中，转到以下路径：
+```
+HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Console
+```
+ 
+
+3.  创建一个新的字符串值： 
+   - 在右侧窗格中，右键单击空白处，选择 "新建" -> "字符串值"。
+   - 将新值命名为 `CodePage`。
+4.  设置字符串值的数据： 
+   - 双击新创建的 `CodePage` 值，将其数值数据设置为 `65001`（UTF-8 对应的代码页编号）。
+5.  重新启动计算机： 
+   - 更改注册表后，为了使更改生效，需要重新启动计算机。
+
+完成以上步骤后，控制台的默认代码页就会被永久设置为 UTF-8，这样在控制台中就可以正确显示和处理 UTF-8 编码的文本了。请在更改注册表时小心谨慎，确保不要更改其他重要的设置。
+
+<a name="tvLQU"></a>
+## stopWatch
+在使用stopWatch时，如果开启一个task，不调用 stopWatch.stop();的话<br />        long totalTimeMillis = stopWatch.getTotalTimeMillis();<br />获取到的**totaltime为0**<br />同样情况下，不调用 stopWatch.stop();的话<br />        long lastTaskTimeMillis = stopWatch.getLastTaskTimeMillis();<br />方法会报错：<br />`Exception in thread "main" java.lang.IllegalStateException: No tasks run: can't get last task interval`
+```java
+ public static void stopWatchTest(){
+        StopWatch stopWatch = new StopWatch();
+        stopWatch.start("task1");
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        // stopWatch.stop();
+        long totalTimeMillis = stopWatch.getTotalTimeMillis();
+        System.out.printf("totalTimeMillis: %d\n", totalTimeMillis);
+     
+        long lastTaskTimeMillis = stopWatch.getLastTaskTimeMillis();
+        System.out.printf("totalTimeMillis: %d\n", lastTaskTimeMillis);
+    }
+```
+如果要一直不间断的检测代码进程是否存活（while（true）） 1. 浪费资源 2. 太严格，没意义<br />所以选择隔一段时间检测代码进程存活情况：
+
+1. 直接在设置最大存活时间时检测，
+   1. 如果此时代码进程仍存活说明肯定运行超时，直接终止该进程
+      1. 进行后续异常终止处理收集结果（检测所有输入用例消耗时间是否超时，只开一个守护线程）
+   2. 如果此时进程已经终止，判断是守护线程杀死还是主动结束的
+      1. 输入用例size==输出结果size
+         1. 程序顺利运行结束
+         2. 说明在**最大规定时间内**执行结束程序，正常获取每次的stopwatch结果计时即可
+
+<a name="jRKn7"></a>
+### 实体类
+**字段属性要对应，否则依赖mybatis框架查询出来的字段不会自动填充到实体类中**
+
+   1. @TableField(exist = false)注解通常用于Java中的ORM框架，比如MyBatis或者Hibernate。这个注解的作用是告诉ORM框架在数据库表中不存在与之对应的字段，这样在进行数据库操作时，ORM框架就会忽略这个字段，不会将其纳入到SQL语句中。这在一些特定的业务场景下非常有用，比如在实体类中定义了一些与数据库表无关的计算字段或者临时字段时，可以使用这个注解来标识这些字段。
+   2. 数据库字段实体类的作用和意义在于将数据库表中的字段映射到对应的Java实体类中，这样可以通过对象来表示数据库中的数据，从而方便在代码中进行操作和处理。通过实体类，可以将数据库表的结构和数据操作封装成对象，提高了代码的可读性和可维护性。
+
+数据库字段实体类的作用和意义包括：
+
+1. 数据结构映射：实体类中的属性通常对应数据库表中的字段，通过实体类可以清晰地了解数据库表的结构和字段含义。
+2. 数据操作封装：实体类中可以定义数据操作的方法，比如数据验证、数据转换等，使得对数据的操作更加方便和安全。
+3. 对象化操作：使用实体类可以将数据库表中的数据转换为对象，从而可以更加方便地在代码中进行操作，比如传递对象作为参数、返回对象作为结果等。
+4. ORM框架支持：很多ORM（对象-关系映射）框架都支持将数据库表映射为实体类，通过实体类可以方便地进行数据库操作，减少了手动编写SQL语句的工作量。
+
+总之，数据库字段实体类的作用和意义在于提供了一种对象化的方式来处理数据库表中的数据，使得数据操作更加直观、方便和安全。
+<a name="pCuOA"></a>
+## Springboot相关
+<a name="WyTHP"></a>
+## bean
+互相循环依赖，另一个bean添加懒启动注解 @Lazy
+
+<a name="d8I0C"></a>
+### strem流和lamdb表达式
+```java
+public Page<QuestionSubmitVO> getQuestionSubmitVOPage(Page<QuestionSubmit> questionSubmitPage, User loginUser) {
+        List<QuestionSubmit> questionSubmitList = questionSubmitPage.getRecords();
+        Page<QuestionSubmitVO> questionSubmitVOPage = new Page<>(questionSubmitPage.getCurrent(), questionSubmitPage.getSize(), questionSubmitPage.getTotal());
+        if (CollectionUtils.isEmpty(questionSubmitList)) {
+            return questionSubmitVOPage;
+        }
+        List<QuestionSubmitVO> questionSubmitVOList = questionSubmitList.stream()
+                .map(questionSubmit -> getQuestionSubmitVO(questionSubmit, loginUser))
+                .collect(Collectors.toList());
+        questionSubmitVOPage.setRecords(questionSubmitVOList);
+        return questionSubmitVOPage;
+    }
+```
+
+```java
+    /**
+     * 提交用户信息
+     */
+    private UserVO userVO;
+
+    /**
+     * 对应题目信息
+     */
+    private QuestionVO questionVO;
+
+/**
+     * 对应题目信息
+     */
+    private QuestionVO questionVO;
+
+    /**
+     * 包装类转对象
+     *
+     * @param questionSubmitVO
+     * @return
+     */
+    public static QuestionSubmit voToObj(QuestionSubmitVO questionSubmitVO) {
+        if (questionSubmitVO == null) {
+            return null;
+        }
+        QuestionSubmit questionSubmit = new QuestionSubmit();
+        BeanUtils.copyProperties(questionSubmitVO, questionSubmit);
+        JudgeInfo judgeInfoObj = questionSubmitVO.getJudgeInfo();
+        if (judgeInfoObj != null) {
+            questionSubmit.setJudgeInfo(JSONUtil.toJsonStr(judgeInfoObj));
+        }
+        return questionSubmit;
+    }
+
+    /**
+     * 对象转包装类
+     *
+     * @param questionSubmit
+     * @return
+     */
+    public static QuestionSubmitVO objToVo(QuestionSubmit questionSubmit) {
+        if (questionSubmit == null) {
+            return null;
+        }
+        QuestionSubmitVO questionSubmitVO = new QuestionSubmitVO();
+        BeanUtils.copyProperties(questionSubmit, questionSubmitVO);
+        String judgeInfoStr = questionSubmit.getJudgeInfo();
+        questionSubmitVO.setJudgeInfo(JSONUtil.toBean(judgeInfoStr, JudgeInfo.class));
+        return questionSubmitVO;
+    }
+
+```
+
+
+
+在这段代码中，`.map(questionSubmit -> getQuestionSubmitVO(questionSubmit, loginUser))` 使用了Java 8的Stream API中的`map`方法。在这里，`map`方法将会遍历`questionSubmitList`中的每一个`QuestionSubmit`对象，并对每个对象应用提供的函数，这里是`questionSubmit -> getQuestionSubmitVO(questionSubmit, loginUser)`。这种写法被称为Lambda表达式，它允许你以一种更简洁的方式传递函数作为参数。在这里，`questionSubmit -> getQuestionSubmitVO(questionSubmit, loginUser)` 就是一个函数，它接受一个`QuestionSubmit`对象作为参数，并返回一个对应的`QuestionSubmitVO`对象。因此，`.map(questionSubmit -> getQuestionSubmitVO(questionSubmit, loginUser))` 的作用就是将`questionSubmitList`中的每个`QuestionSubmit`对象映射为相应的`QuestionSubmitVO`对象。
+
+在这段代码中，`new Page<>(questionSubmitPage.getCurrent(), questionSubmitPage.getSize(), questionSubmitPage.getTotal())` 返回的是一个`Page<QuestionSubmitVO>`对象，而不是`Page<QuestionSubmit>`对象，这可能是因为在这个场景中，希望返回的是一个包含`QuestionSubmitVO`对象的分页结果，而不是原始的`QuestionSubmit`对象。
+
+这种情况下，可能是因为需要将`questionSubmitList`中的`QuestionSubmit`对象转换为`QuestionSubmitVO`对象，并将其放入一个新的`Page`对象中进行返回。因此，通过创建一个新的`Page<QuestionSubmitVO>`对象，可以确保返回的分页结果中包含的是经过特定处理后的`QuestionSubmitVO`对象，而不是原始的`QuestionSubmit`对象。
+<a name="a8ML4"></a>
+## 配置文件参数读取
+todo
+<a name="tgTy9"></a>
+### @RestController
+在Spring框架中，使用`@RestController`注解标记的Controller类会将返回值自动转换为JSON格式进行传输。
+
+当返回值为int、Integer、Long等基本数据类型或其包装类时，Spring会自动将其转换为JSON格式进行传输。<br />例如，当Controller方法返回int类型的数据时，Spring会将其转换为JSON格式进行传输：
+```java
+@RestController
+public class MyController {
+    
+    @GetMapping("/getNumber")
+    public int getNumber() {
+        return 123;
+    }
+}
+```
+
+在这个例子中，当访问`/getNumber`接口时，返回的数据会被转换为JSON格式，例如`{"value": 123}`。<br />因此，使用`@RestController`注解标记的Controller类会自动处理基本数据类型和包装类的返回值，将其转换为JSON格式进行传输。
+<a name="Ehq6k"></a>
+### 分页查询
+
+`queryWrapper.ne` 是 MyBatis-Plus 中的一个方法，用于生成 SQL 查询条件中的不等于（not equal）条件。它的作用是生成类似于 `column_name <> value` 的 SQL 查询条件。
+
+<a name="tv0Y8"></a>
+## 数据库操作
+<a name="wgSIp"></a>
+## 更新数据库字段
+方法中为什么每次更新数据库中questionSubmit的status字段时都要新new一个questionSubmit对象<br />在这个方法中，每次更新数据库中`questionSubmit`的`status`字段时都要新new一个`QuestionSubmit`对象的原因是为了确保每次更新的对象是独立的，避免可能出现的对象引用问题或者状态混乱的情况。如果重复使用第一次更新时的对象并重新设置不同的值，可能会导致对象状态的混乱或者不可预测的行为。
+
+通过创建新的`QuestionSubmit`对象，可以确保每次更新操作都是基于一个新的干净对象进行的，从而避免潜在的错误或逻辑混乱。这种做法可以提高代码的可读性、可维护性和可靠性。<br />因此，虽然在**理论上可以重复使用**第一次更新时的对象并重新设置不同的值，但为了确保代码的健壮性和可靠性，建议每次更新数据库中的`questionSubmit`的`status`字段时都新new一个新的`QuestionSubmit`对象。<br />在MyBatis Plus中，是两种不同的操作：
+<a name="uSO3f"></a>
+## save和update
+
+1. **save操作：save操作用于向数据库中插入一条新的记录。如果插入的记录在数据库中已存在，则会抛出异常。在实际应用中，save方法通常用于插入新数据。**
+
+在MyBatis Plus中，插入数据并返回主键值的方法是save方法。当使用save方法成功插入数据后，会将生成的主键值设置到实体对象中，并可以通过实体对象获取到该主键值。<br />示例代码：
+```java
+User user = new User();
+user.setName("Alice");
+user.setAge(25);
+user.setEmail("alice@example.com");
+
+userMapper.save(user);
+
+Long primaryKey = user.getId(); // 获取插入数据的主键值
+```
+
+在上面的示例中，使用save方法成功插入数据后，可以通过实体对象的getId()<br />示例代码：
+```java
+User user = new User();
+user.setName("Alice");
+user.setAge(25);
+user.setEmail("alice@example.com");
+
+userMapper.save(user);
+```
+
+2. **update操作：update操作用于更新数据库中已存在的记录。在MyBatis Plus中，update方法通常需要指定更新的条件，可以是根据主键更新，也可以是根据其他条件更新。在实际应用中，update方法通常用于更新已有数据。**
+
+示例代码：
+
+```java
+User user = userMapper.selectById(1L);
+user.setName("Bob");
+user.setAge(30);
+
+userMapper.updateById(user);
+```
+
+总结：
+
+- save方法用于插入新数据，如果数据已存在会抛出异常；
+- update方法用于更新已有数据，需要指定更新条件。
+
+方法获取到插入数据的主键值。因此，save方法在插入数据后会返回主键值。<br />在实际开发中，根据具体业务需求选择使用save还是update方法。
+
+<a name="p1Wy2"></a>
+## 
+<a name="fdzm7"></a>
+# 判题模块架构设计
+逻辑关系：题目提交服务--->(调用了)判题服务模块--->(调用了)代码沙箱服务<br />判题模块需要调用调用代码沙箱运行代码，并进行题目运行结果正确与否的相关判断。
+<a name="mOQUf"></a>
+## 判题设计逻辑基础
+<a name="u6imG"></a>
+### 不同的判题策略
+根据不同的编程语言选择不同的判题策略（不同语言的不同特性决定了一道题正确与否不能依赖同一套判断逻辑，例如运行时间的限制，应根据不同的语言进行**调整标准的判题时间**）
+<a name="Df9XR"></a>
+### 工厂模式
+代码沙箱调用策略<br />使用工厂模式选择 调用 哪种代码沙箱（远程/本地/第三方？）可根据yaml文件读取 type 的值从而创建不同的代码沙箱示例
+<a name="lRXJi"></a>
+### 代理模式
+由于原本的沙箱只有执行代码的功能，如果我们调用沙箱服务时想在沙箱执行代码（调用executeCode方法）时增加其他功能，例如在方法执行前后打日志或记录其他信息，可以使用使用沙箱代理类来增强原本的沙箱的方法。
+
+<a name="QGLRk"></a>
+### 调用关系（实现方式）
+
+1. 在questionSubmitService的方法里调用JudgeService的doJudge方法
+2. 在JudgeService中调用JudgeManager的判题逻辑服务(包装了选择好判题策略的doJudge方法)
+3. 在JudgeManager（注册为service服务）中实现根据读取编程语言的类型进行创建不同的判题策略并进行dojudge方法的调用
+4. 编写不同的判题策略：每套执行语言实现一个判题策略方法，均实现JudgeStrategy接口的doJudge方法
+
+![image.png](https://cdn.nlark.com/yuque/0/2024/png/1238904/1712572558348-a2998821-4150-4d91-ad52-d6ecb67a4729.png#averageHue=%23ebfcef&clientId=u4640eb89-ec2b-4&from=paste&height=359&id=u0ae759cd&originHeight=553&originWidth=784&originalType=binary&ratio=1.5&rotation=0&showTitle=false&size=59687&status=done&style=none&taskId=u1a91e12f-7972-4b12-b046-e828d259924&title=&width=509)<br />![image.png](https://cdn.nlark.com/yuque/0/2024/png/1238904/1712572794388-c5812d61-dd9d-46e0-a9dd-fc81ff855ce4.png#averageHue=%23ebfcef&clientId=u4640eb89-ec2b-4&from=paste&height=339&id=uf2841d61&originHeight=550&originWidth=804&originalType=binary&ratio=1.5&rotation=0&showTitle=false&size=57517&status=done&style=none&taskId=ubefdabf8-c6f7-4255-9a01-a21ddda1cd4&title=&width=495)<br />![image.png](https://cdn.nlark.com/yuque/0/2024/png/1238904/1712572903164-6db848e8-f33d-4a25-9ee3-13a0daa259f1.png#averageHue=%23ebfcef&clientId=u4640eb89-ec2b-4&from=paste&height=367&id=ufb8f655f&originHeight=699&originWidth=995&originalType=binary&ratio=1.5&rotation=0&showTitle=false&size=94288&status=done&style=none&taskId=u7c10287f-47fb-4a15-ac32-b51d87bb4bb&title=&width=522)<br />JudgeServiceImpl<br />![image.png](https://cdn.nlark.com/yuque/0/2024/png/1238904/1712573002955-7609bb44-7da1-4dbc-889d-7a15921b9402.png#averageHue=%23ebfcef&clientId=u4640eb89-ec2b-4&from=paste&height=328&id=ua97b0efb&originHeight=328&originWidth=807&originalType=binary&ratio=1.5&rotation=0&showTitle=false&size=62928&status=done&style=none&taskId=u12354695-e2ea-40e2-b72a-8e7df46aa3e&title=&width=807)<br />![image.png](https://cdn.nlark.com/yuque/0/2024/png/1238904/1712573969792-e4848edb-fb1e-4da1-9c01-51310faa60ea.png#averageHue=%23dfdf17&clientId=u714f537b-7301-4&from=paste&height=456&id=ucbe7a2be&originHeight=456&originWidth=1068&originalType=binary&ratio=1&rotation=0&showTitle=false&size=73477&status=done&style=none&taskId=u597ead2e-c5c1-4693-83ca-4732bd55a71&title=&width=1068)
+
+<a name="Jve8G"></a>
+## 判题模块设计
+![image.png](https://cdn.nlark.com/yuque/0/2024/png/1238904/1712575031702-8615a3ec-66a3-486e-917f-6d15b13939c5.png#averageHue=%23fbfaf9&clientId=u714f537b-7301-4&from=paste&height=265&id=u1ed9ba1d&originHeight=265&originWidth=269&originalType=binary&ratio=1&rotation=0&showTitle=false&size=7817&status=done&style=none&taskId=u05ad73d1-5617-49d1-98ba-3a44f54ea1a&title=&width=269)<br />![image.png](https://cdn.nlark.com/yuque/0/2024/png/1238904/1712575101687-2fa6fa65-6d30-4cd1-b25e-30f525e4517b.png#averageHue=%23f8f7f6&clientId=u714f537b-7301-4&from=paste&height=406&id=u30c0b531&originHeight=406&originWidth=364&originalType=binary&ratio=1&rotation=0&showTitle=false&size=24926&status=done&style=none&taskId=u9f505ab8-52ab-4e14-beca-c1470c8547b&title=&width=364)<br />![image.png](https://cdn.nlark.com/yuque/0/2024/png/1238904/1712575124302-11bc9ff1-2572-4226-938b-0f56309d0058.png#averageHue=%23f8f7f6&clientId=u714f537b-7301-4&from=paste&height=451&id=uff18f76b&originHeight=451&originWidth=368&originalType=binary&ratio=1&rotation=0&showTitle=false&size=23769&status=done&style=none&taskId=ub3cf9161-5625-4bef-8f4b-20540bbed90&title=&width=368)<br />![image.png](https://cdn.nlark.com/yuque/0/2024/png/1238904/1712575181257-7770aa46-912b-422f-a613-d2924721d7ad.png#averageHue=%23fcfaf9&clientId=u714f537b-7301-4&from=paste&height=179&id=ufd4b0300&originHeight=179&originWidth=316&originalType=binary&ratio=1&rotation=0&showTitle=false&size=8351&status=done&style=none&taskId=u63f10c66-b1d0-4bda-a927-8d81eea6407&title=&width=316)<br />![image.png](https://cdn.nlark.com/yuque/0/2024/png/1238904/1712575225724-8def0c2a-a6f8-4814-8641-dd22eaa2619a.png#averageHue=%23fcfbfa&clientId=u714f537b-7301-4&from=paste&height=188&id=u1b109ea4&originHeight=188&originWidth=367&originalType=binary&ratio=1&rotation=0&showTitle=false&size=9039&status=done&style=none&taskId=u6fdd2d08-5155-4bec-871e-48223de08f5&title=&width=367)<br />![image.png](https://cdn.nlark.com/yuque/0/2024/png/1238904/1712574931187-8b4fc478-9c03-45ec-a5cd-652cee3ae116.png#averageHue=%23e8fbed&clientId=u714f537b-7301-4&from=paste&height=186&id=uebc80916&originHeight=186&originWidth=442&originalType=binary&ratio=1&rotation=0&showTitle=false&size=13571&status=done&style=none&taskId=u15265a5f-62af-4755-ab59-1600e58c877&title=&width=442)
+
+<a name="qQ38R"></a>
+## 判题参数设计
+JudgeContext用于传递上下文参数<br />![image.png](https://cdn.nlark.com/yuque/0/2024/png/1238904/1712574680531-1e18cfa8-1c6f-43f6-b86b-0f8fae258799.png#averageHue=%23ebfcef&clientId=u714f537b-7301-4&from=paste&height=376&id=u6492c540&originHeight=376&originWidth=648&originalType=binary&ratio=1&rotation=0&showTitle=false&size=26652&status=done&style=none&taskId=ub1b3eb11-0594-4e53-b61d-b9d3e6617b3&title=&width=648)<br />![image.png](https://cdn.nlark.com/yuque/0/2024/png/1238904/1712574576758-ce4b54f1-6f1a-4a2f-b002-bc7b9b0d7f7d.png#averageHue=%23e8fbeb&clientId=u714f537b-7301-4&from=paste&height=338&id=u724fbc6a&originHeight=338&originWidth=619&originalType=binary&ratio=1&rotation=0&showTitle=false&size=47185&status=done&style=none&taskId=u6c9f4516-88ce-4127-b624-4e5c485fec7&title=&width=619)<br />![image.png](https://cdn.nlark.com/yuque/0/2024/png/1238904/1712574804684-4911e5cc-f8a4-497f-80f3-418273248e3b.png#averageHue=%23e9fcee&clientId=u714f537b-7301-4&from=paste&height=570&id=u0c4b9912&originHeight=570&originWidth=727&originalType=binary&ratio=1&rotation=0&showTitle=false&size=60169&status=done&style=none&taskId=u71403239-4323-4e28-a0e1-fc7c67e3d27&title=&width=727)<br />JudgeContext参数设计<br />![image.png](https://cdn.nlark.com/yuque/0/2024/png/1238904/1712574832277-e9d09753-a84b-47aa-aadc-bab0c431056a.png#averageHue=%23e7f9ec&clientId=u714f537b-7301-4&from=paste&height=324&id=ud6474540&originHeight=324&originWidth=398&originalType=binary&ratio=1&rotation=0&showTitle=false&size=21518&status=done&style=none&taskId=u2b2f9408-ceb0-4b34-837b-7379bd3e8d0&title=&width=398)
+<a name="Guave"></a>
+## service判题流程
+
+1. 从数据查询提交记录，判断判题状态
+2. 参数校验
+3. 更改判题状态为判题中
+4. 调用代码沙箱服务，运行代码
+5. 获取输出值
+6. 根据语言选择判题策略
+7. 校验输出值
+8. 判题状态更改， 判题结果存入数据库中
+<a name="AD39f"></a>
+## 代码沙箱接口设计
+
+1. sandbox 接口 定义了代码沙箱调用执行代码的相关方法
+2. executeCodeResponse： 代码沙箱执行返回结果
+   1. <br />
+3. executeCodeRequest： 调用代码沙箱需要传入的dto类
+   1. 传入的输入用例每组都有间隔 保存形式为list<String>
+
+![image.png](https://cdn.nlark.com/yuque/0/2024/png/1238904/1712571113709-8481621d-43c9-4d21-af3f-69ef877e78f5.png#averageHue=%23e9faed&clientId=u4640eb89-ec2b-4&from=paste&height=438&id=u0389b5fb&originHeight=438&originWidth=977&originalType=binary&ratio=1.5&rotation=0&showTitle=false&size=77850&status=done&style=none&taskId=u0390cd37-6f35-4ba7-b63f-b54c30af5de&title=&width=977)
+
+
+<a name="rdr9J"></a>
+## 架构设计逻辑图
+![](https://cdn.nlark.com/yuque/0/2024/jpeg/1238904/1712574110899-5101c5af-296b-4191-b547-83b034161bb3.jpeg)
+<a name="XyaAs"></a>
+# JAVA原生代码沙箱实现
+实用工具类
+
+1. 查看JVM运行情况小工具Jcon，可视化查看jvm运行情况，包括jvm回收，内存占用等
+2. hutool中自带的 wordTree 字典树，可以构建一个传入列表的字典树，可方便快速查找是否存在某个词
+<a name="C4Yl3"></a>
+## 执行代码思路
+<a name="IACJw"></a>
+### 执行代码程序思路
+
+1. 把用户传来的代码保存到特定的路径，作为java文件
+2. 使用Process类（java原生的命令行执行类），编译代码，得到class文件
+3. 执行代码，等待程序执行结束
+4. 根据Process的 Process.waitFor()方法获得程序执行结果的退出码
+5. 从Process对象获得InputStream对象获得控制台获取输出结果
+6. 保存正常结束程序或异常结束程序的控制台信息
+<a name="sNOpQ"></a>
+### Process类
+Starts a new process using the attributes of this process builder.<br />The new process will invoke the command and arguments given by command(), in a working directory as given by directory(), with a process environment as given by environment().
+<a name="JxEK4"></a>
+### 获取输出
+在执行编译程序时指定编码参数，防止输出乱码<br />for循环执行命令<br />循环输入输入实例<br />收集输出结果 以及输出信息<br />使用spring提供的stopwatch计时 获取执行时间，使用最大时间来统计判题时间（or平均值）<br />运行内存信息难以获取，因为无法从Process类中获取到进程号，无法获知运行过程中子程序（用户代码）占用的内存空间
+<a name="KGMlY"></a>
+#### 运行计时
+```java
+runStopWatch.start();
+Process runProcess = Runtime.getRuntime().exec(runCmd);
+runStopWatch.stop();
+```
+这行代码的执行时间会包括里面新进程执行指令的时间。当调用`Runtime.getRuntime().exec(runCmd)`时，会启动一个新的进程来执行`runCmd`中指定的命令，整个过程会耗费一定的时间。因此，如果`runCmd`中的指令是一个耗时操作，那么整行代码的执行时间将会包括这部分耗时操作的时间。
+```java
+ int exitValue = runProcess.waitFor();
+```
+是的，`waitFor`方法会导致当前线程等待，直到通过该`Process`对象执行的命令完成为止。一旦命令执行完成，`waitFor`方法会返回执行结果，然后你可以通过`exitValue`来获取命令的退出值。在等待的过程中，`Process`对象内部会记录命令的执行信息，包括执行结果、输出信息等。因此，你可以通过`waitFor`方法来等待命令执行完成，并获取相应的执行信息。
+
+<a name="kEJ5V"></a>
+##### 计时错误思路
+在守护线程中实时监控cmd进程是否存活，并开启stopWatch计时
+
+1. 用while循环实时监测是否存活并
+<a name="wsvds"></a>
+### 执行结束文件清理
+在.gitignore文件中添加用户代码目录
+
+防止服务器内存空间不足，删除代码目录（或者存储数据库中）<br />FileUtil判断目录是否存在后删除
+<a name="cCotn"></a>
+### 代码沙箱内部错误处理
+封装一个错误处理方法，处理系统异常，当用户代码执行异常时也可以直接返回
+<a name="V5hZq"></a>
+## 安全设置
+恶意操作
+
+1. 执行超时
+2. 占用内存
+3. 越权操作。。等操作
+   1. 读取操作系统文件
+   2. 写文件
+   3. 删除文件
+   4. 更改文件
+   5. 执行文件
+4. 执行高危操作
+<a name="aruA2"></a>
+## java程序安全控制
+
+1. 超时控制
+   1. 开启一个守护线程，计时，超过一定时间就杀死用户代码线程
+2. 限制资源分配
+
+实际在执行程序时，你存达到JVM分配的最大堆内存之后程序就会自动报错<br />可以使用JVisualVM 或 JConsole （jdk中自带的）工具，连接到JVM虚拟机上可视化查看运行状态<br />在启动java程序时指定JVM的参数，限制最大堆空间大小
+```java
+java -Xmx256m
+```
+但是-Xmx参数、JVM堆内存的限制，不等同于系统实际占用的最大资源（主线程占用内存）<br />更严格的内存限制，需要在系统层面限制，JVM层面的限制有限<br />Linux系统，可以使用cgroup来实现对某个进程的CPU，Memory等资源的分配
+<a name="DCyOC"></a>
+#### JVM常用启动参数
+
+<a name="PW2kE"></a>
+### 权限控制-黑白名单
+定义黑名单，禁止敏感操作（例如调用File操作相关的函数）<br />结合**wordTree字典树**存储黑名单中单词，使用更少的空间存储更多的敏感词汇，并且实现更高效的词汇查找<br />字典树实现<br />使用hutool的字典树工具类，不需要自己构建字典树<br />使用静态代码块初始化一个全局字典树<br />将代码放到字典树里去匹配（WORD_TREE.matchWord(code)方法）<br />优点：<br />简单，易实现<br />缺点：<br />误判可能性高：关键词与自定义变量名冲突<br />对不同的编程语言、对应不同的领域，敏感词都不尽相同，建立完整全面的黑名单、维护黑名单成本高
+<a name="Ddps2"></a>
+### Java安全管理器
+java原生提供了安全管理器(Security Manager) 提供保护JVM，java程序的安全机制，可以实现比较全面的资源限制和权限限制操作
+
+<a name="xSwQT"></a>
+#### 编写安全管理器
+继承Sercurity Manager类
+
+在禁止访问的方法处抛出异常
+
+<a name="XFHK3"></a>
+#### 在程序中使用
+我们需要在用户进程中限制权限而非在项目中限制权限操作（在外层调用会限制测试用例的读写和子进程的执行命令）
+
+1. 根据需要自定义自己的安全管理器
+2. 复制到 resource/security 目录下,移除类的包名
+3. 手动编译安全管理器类，得到class文件
+4. 在运行java程序时，指定安全管理器的class文件的路径、安全管理器的名称
+```java
+java -Dfile.encoding=UTF-8 -cp %s;%s -Djava.security.manager=MySecurityManager Main
+```
+> 这段命令是用来运行Java程序的。其中，-Dfile.encoding=UTF-8表示设置文件编码为UTF-8，-cp %s;%s表示设置classpath，-Djava.security.manager=MySecurityManager表示设置安全管理器为MySecurityManager，Main表示要运行的主类。
+
+优点：
+
+1. 权限控制灵活
+2. 实现简单
+
+缺点：
+
+1. 如果要做到更精细化的安全控制，需要较繁杂的逻辑设置，例如判断某些文件能读写，某些不可，麻烦
+2. 本质上还是java代码层面的安全限制，可能存在漏洞，层序层面的限制不如系统层面的限制深入
+
+<a name="kmJyl"></a>
+# 项目完成功能
+
+1. 系统架构:根据功能职责，将系统划分为负责核心业务的后端模块、负责校验结果的判题模块、负责编译执行代码的可复用代码沙箱。各模块相互独立，并通过 API 接口和分包的方式实现协作。
+2. 库表设计:根据业务流程自主设计用户表、题目表、题目提交表，并通过给题目表添加 userld 索2.引提升检索性能。(感兴趣的同学可以自己测试一下性能的提高比例)
+3. 自主设计判题机模块的架构，定义了代码沙箱的抽象调用接口和多种实现类(比如远程/第三方代3.码沙箱)，并通过 **静态工厂模式 + Spring 配置化** 的方式实现了对多种代码沙箱的灵活调用。
+4. 使用 **代理模式 **对代码沙箱接口进行能力增强，统一实现了对代码沙箱调用前后的日志记录，减少重复代码
+5. 由于判题逻辑复杂、且不同题目的判题算法可能不同(比如 Java 题目额外增加空间限制)，选用**策略模式 **代替 if else 独立封装了不同语言的判题算法，提高系统的可维护性。
+6. 使用 Java Runtime 对象的 exec 方法实现了对 Java 程序的编译和执行，并通过** Process 类 **的输入流获取执行结果，实现了Java 原生代码沙箱。
+7. 通过编写 Java 脚本自测代码沙箱，模拟了多种程序异常情况并针对性解决，如使用守护线程 +Thread.sleep 等待机制实现了对进程的超时中断、使用 JM -Xmx 参数限制用户程序占用的最大堆内存、使用 黑白名单 + 字典树 的方式实现了对敏感操作的限制。(选1-2 种即可)
+8. 使用 Java 安全管理器和自定义的 Security Manager 对用户提交的代码进行权限控制，比如关闭写文件、执行文件权限，进一步提升了代码沙箱的安全性。
+9. 为保证沙箱宿主机的稳定性，选用 Docker 隔离用户代码，使用 Docker Java 库创建容器隔离执9 .行代码，并通过 tty 和 Docker 进行传参交互，从而实现了更安全的代码沙箱。
+10. 使用 VMware Workstation 虛拟机软件搭建 Ubuntu Linux + Docker 环境，并通过 JetBrainsClient 连接虚拟机进行实时 **远程开发**，提高了开发效率。
+11. 为提高 Docker 代码沙箱的安全性，通过 HostConfig 限制了容器的内存限制和网络隔离，并通过设置容器执行超时时间解决资源未及时释放的问题。
+12. 由于 Java 原生和 Docker 代码沙箱的实现流程完全一致(编译、执行、获取输出、清理)，选用12模板方法模式定义了一套标准的流程并允许子类自行扩展部分流程，提高代码一致性并大幅简化冗余代码。
+13. 为防止用户恶意请求代码沙箱服务，(采用 API签名认证的方式，)给调用方分配签名密钥，并通过校验请求头中的密钥保证了 API调用安全。
+14. 为保证项目各模块的稳定性，选用 Spring Cloud Alibaba 重构单体项目，(使用 Redis 分布式Session 存储登录用户信息，并将项目)划分为用户服务、题目服务、判题服务、公共模块。
+15. 使用阿里云原生脚手架初始化微服务项目，并结合 Maven 子父模块的配置，保证了微服务各模块依赖的版本一致性，避免依赖冲突。
+16. 通过工具(JetBrains 的 Find Usage 功能+表格整理)梳理微服务间的调用关系，并通过Nacos + OpenFeign 实现了各模块之间的相互调用，如判题服务调用题目服务来获取题目信息。
+17. 使用 Spring Cloud Gateway 对各服务接口进行聚合和路由，保护服务的同时简化了客户端的调用(前端不用根据业务请求不同端口的服务)，并通过自定义 CorsWebFilter Bean 全局解决了跨域问题。
+18. 使用 Knife4j Gateway 在网关层实现了对各服务 Swagger 接口文档的统一聚合，无需通过切换地址查看各服务的文档。
+19. 为保护内部服务接口，给接口路径统一设置inner 前缀，并通过在网关自定义 GlobalFilter(全局请求拦截器)实现对内部请求的检测和拦截，集中解决了权限校验问题。
+20. 为防止判题操作执行时间较长，系统选用异步的方式，在题目服务中将用户提交id 发送给RabbitMQ 消息队列，并通过 Direct 交换机转发给判题队列，由判题服务进行消费，异步更新提交状态。相比于同步，响应时长由 xx 秒减少至 xx 秒，且系统 qps 提升了 xx%(需要自己使用JMeter 等工具进行测试)。
+21. 基于自己二次开发的 Spring Boot 初始化模板 + MyBatis X插件，快速生成图表、用户数据的增删改查。
+> 这段文字主要描述了使用代理模式对代码沙箱接口进行能力增强，选用模板方法模式定义标准流程，并允许子类自行扩展部分流程。同时采用策略模式替代if else，独立封装不同语言的判题算法，以提高系统可维护性。通过Java Runtime对象实现编译和执行，并使用Process类的输入流获取执行结果，实现了Java原生代码沙箱。同时还介绍了通过Docker隔离用户代码，使用Docker Java库创建容器隔离执行代码，并通过tty和Docker进行传参交互，提高了代码沙箱的安全性。最后还提到了使用Spring Cloud Alibaba重构单体项目，划分为用户服务、题目服务、判题服务、公共模块，并通过Nacos+OpenFeign实现了各模块之间的相互调用等内容。
+
+<a name="RKxBD"></a>
+#### 经过压缩
+
+1. 熟悉系统架构设计，包括后端模块、判题模块和代码沙箱的独立设计与协作。
+2. 精通库表设计，独立设计用户表、题目表、题目提交表，并通过索引优化检索性能。
+3. 自主设计判题机模块，实现代码沙箱的抽象调用接口和多种实现类，并采用静态工厂模式和Spring配置化实现多种代码沙箱的灵活调用。
+4. 使用代理模式对代码沙箱接口进行能力增强，统一实现日志记录，减少重复代码。
+5. 熟练运用策略模式，独立封装不同语言的判题算法，提高系统可维护性。
+6. 实现Java程序的编译和执行，通过Java Runtime对象的exec方法和Process类获取执行结果，构建Java原生代码沙箱。
+7. 模拟多种程序异常情况并解决，包括超时中断和最大堆内存限制等，提升代码沙箱的稳定性。
+8. 使用Java安全管理器和自定义Security Manager对用户提交的代码进行权限控制，提升代码沙箱的安全性。
+9. 通过Docker隔离用户代码，使用Docker Java库创建容器隔离执行代码，提高代码沙箱的安全性。
+10. 搭建Ubuntu Linux + Docker环境，通过JetBrainsClient进行实时远程开发，提高开发效率。
+11. 使用HostConfig限制容器的资源和网络隔离，并设置容器执行超时时间，提高Docker代码沙箱的安全性。
+12. 使用模板方法模式定义标准流程，允许子类扩展部分流程，提高代码一致性并简化冗余代码。
+13. 实现API签名认证，通过分配签名密钥和校验请求头保证API调用安全。
+14. 使用Spring Cloud Alibaba重构单体项目，划分为用户服务、题目服务、判题服务和公共模块，提高项目稳定性。
+15. 使用阿里云原生脚手架初始化微服务项目，并结合Maven子父模块配置，保证各模块依赖版本一致性。
+16. 通过Nacos和OpenFeign实现微服务之间的相互调用，提高系统的可扩展性。
+17. 使用Spring Cloud Gateway对各服务接口进行聚合和路由，简化客户端调用并解决跨域问题。
+18. 使用Knife4j Gateway实现各服务Swagger接口文档的统一聚合，提高文档查看效率。
+19. 通过在网关设置接口路径前缀和自定义GlobalFilter实现对内部请求的检测和拦截，解决权限校验问题。
+20. 使用异步方式发送消息至RabbitMQ消息队列，实现判题操作的异步处理，提升系统响应速度和QPS。
+21. 基于二次开发的Spring Boot初始化模板和MyBatis X插件，快速生成图表和用户数据的增删改查功能。
+<a name="mB1iJ"></a>
+# 项目优化点
+
+1. 把微服务项目部署上线，参考教程:(如何快速部署微服务项目?保姆级教程
+2. 增加题目的通过数、提交数统计，计算通过率限制代码沙箱中最多允许同时启动的 Docker 容器数，防止系统过载(甚至还可以用池化技术复用
+3. Docker容器)更多类型的代码沙箱实现，比如使用 A| 进行判题?使用第三方服务(judge0 api)进行判题?5.反向压力:[https://zhuanlan.zhihu.com/p/404993753](https://zhuanlan.zhihu.com/p/404993753)，通过调用的服务状态来选择当前系统的策略(比如根据当前提交任务队列数来控制当前允许用户的最大提交数)，从而最大化利用系统资源。
+4. 限制单个用户的同时最大提交数，合理分配资源。6.
+
+7.限制单个用户的提交频率，可以通过 Redisson 或者 Sentinel 网关层限流实现。8.实现 ACM 模式(通过代码进行输入输出)的代码沙箱<br />9.用同样的思路或者 Linux 的 cgroup 语法实现一种其他编程语言的代码沙箱<br />10.实现 Special Judge 特判程序的逻辑<br />11.给判题过程中的每个测试用例增加一个独立的内存、时间占用的统计<br />12.可以使用 JWT Token 实现用户登录，在网关层面通过 token 获取登录信息，实现鉴权13.处理消息队列的消息重试，避免消息积压(可以选用死信队列)
+<a name="Vilea"></a>
+# Docker代码沙箱
+
+1. ubuntu桌面版安装代码沙箱google参考文章：
+
+[https://juejin.cn/s/ubuntu%E6%A1%8C%E9%9D%A2%E7%89%88%E5%AE%89%E8%A3%85docker](https://juejin.cn/s/ubuntu%E6%A1%8C%E9%9D%A2%E7%89%88%E5%AE%89%E8%A3%85docker)<br />在 Ubuntu 桌面版上安装 Docker，可以按照以下步骤进行：
+
+1. 首先，打开终端并更新包列表：
+```
+sql
+复制代码sudo apt-get update
+```
+
+1. 安装 Docker 的依赖项：
+```
+arduino
+复制代码sudo apt-get install apt-transport-https ca-certificates curl software-properties-common
+```
+
+1. 添加 Docker 的 GPG 密钥：
+```
+arduino
+复制代码curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+```
+
+1. 添加 Docker 的软件源：
+```
+bash
+复制代码sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+```
+
+1. 再次更新包列表：
+```
+sql
+复制代码sudo apt-get update
+```
+
+1. 安装 Docker：
+```
+arduino
+复制代码sudo apt-get install docker-ce
+```
+
+1. 启动 Docker 服务：
+```
+sql
+复制代码sudo systemctl start docker
+```
+
+1. 验证 Docker 是否成功安装：
+```
+css
+复制代码docker --version
+```
+<a name="OZ9fE"></a>
+## docker的使用练习
+linux用户添加到docker组
+```bash
+sudo groupadd docker          #添加docker用户组
+sudo gpasswd -a $XXX docker   #检测当前用户是否已经在docker用户组中
+sudo gpasswd -a $USER docker  #将当前用户添加至docker用户组
+newgrp docker
+```
+<a name="g8qM6"></a>
+## Idea远程开发
+使用ssh先把本地环境传到远程服务器上
+<a name="Z0Rpw"></a>
+#### ssh简介
+SSH：是一种安全通道协议，主要用来实现字符界面的远程登录，远程复制等功能(使用TCP的22号端口)。SSH协议对通信双方的数据传输进行了加密处理，其中包括用户登录时输入的用户口令。<br />在RHEL 5系统中使用的是OpenSSH服务器由openssh，openssh-server等软件包提供的(默认已经安装)，并以将sshd添加为标准的系统服务。<br />SSH提供一下两种方式的登录验证：<br />1、密码验证：以服务器中本地系统用户的登录名称，密码进行验证。<br />2、秘钥对验证：要求提供相匹配的秘钥信息才能通过验证。通常先在客户机中创建一对秘钥文件(公钥和私钥)，然后将公钥文件放到服务器中的指定位置。<br />注意：当密码验证和私钥验证都启用时，服务器将优先使用秘钥验证。<br />SSH的配置文件：<br />sshd服务的配置文件默认在/etc/ssh/sshd_config，正确调整相关配置项，可以进一步提高sshd远程登录的安全性。
+```java
+配置文件的内容可以分为以下三个部分：
+1、常见SSH服务器监听的选项如下：
+Port 22                    //监听的端口为22
+Protocol 2                //使用SSH V2协议
+ListenAdderss 0.0.0.0    //监听的地址为所有地址
+UseDNS no                //禁止DNS反向解析
+2、常见用户登录控制选项如下：
+PermitRootLogin no            //禁止root用户登录
+PermitEmptyPasswords no        //禁止空密码用户登录
+LoginGraceTime 2m            //登录验证时间为2分钟
+MaxAuthTries 6                //最大重试次数为6
+AllowUsers user            //只允许user用户登录，与DenyUsers选项相反
+3、常见登录验证方式如下：
+PasswordAuthentication yes                //启用密码验证
+PubkeyAuthentication yes                    //启用秘钥验证
+AuthorsizedKeysFile .ssh/authorized_keys    //指定公钥数据库文件
+```
+<a name="KAWcb"></a>
+#### 查看远程服务器时候安装ssh服务、客户端、以及是否启动
+**一、检查是否开启SSH服务**<br />因为Ubuntu默认是不安装SSH服务的，所以在安装之前可以查看目前系统是否安装，通过以下命令：<br />**ps -e|grep ssh**
+
+输出的结果ssh-agent表示ssh-client启动，sshd表示ssh-server启动。我们是需要安装服务端所以应该看是否有sshd，如果没有则说明没有安装。<br />**二、安装SSH服务**<br />**sudo apt-get install openssh-client 客户端**<br />**sudo apt-get install openssh-server 服务器**<br />或者<br />**apt-get install ssh**<br />**三、启动SSH服务**
+
+**sudo /etc/init.d/ssh start**<br />**四、修改SSH配置文件**
+
+可以通过SSH配置文件更改包括端口、是否允许root登录等设置，配置文件位置：<br />**/etc/ssh/sshd_config**<br />默认是不允许root远程登录的，可以再配置文件开启。<br />**sudo vi /etc/ssh/sshd_config**<br />找到PermitRootLogin without-password 修改为PermitRootLogin yes （本人遇到过）<br />**五、重启SSH服务**<br />**service ssh restart**<br />即可通过winscp 、putty使用ROOT权限远程登录。<br />启用root用户：sudo passwd root      //修改密码后就启用了。<br />客户端如果是ubuntu的话，则已经安装好ssh client,可以用下面的命令连接远程服务器。<br />$ ssh xxx.xxx.xxx.xxx
+
+<a name="LraXz"></a>
+### TLS证书配置
+`openssl req -newkey rsa:2048 -nodes -keyout key.pem -x509 -days 365 -out cert.pem`<br />![image.png](https://cdn.nlark.com/yuque/0/2024/png/1238904/1713239833294-67544e6d-6207-4e1a-95f3-407bca1f09b7.png#averageHue=%23300b25&clientId=u5038ff9d-3d98-4&from=paste&height=350&id=ud88b17de&originHeight=525&originWidth=914&originalType=binary&ratio=1.5&rotation=0&showTitle=false&size=121142&status=done&style=none&taskId=u2624821d-8766-4d15-bbb0-816c30bafd9&title=&width=609.3333333333334)
+
+<a name="rbIe6"></a>
+# 使用java程序操作docker
+参考文章： [https://www.hangge.com/blog/cache/detail_2547.html](https://www.hangge.com/blog/cache/detail_2547.html)
+
+1. 首先配置docker API监听端口
+2. 编写docker.service文件
+
+在 `**Execstart=/usr/bin/dockerd**`**之后添加内容**<br />`** -H tcp://0.0.0.0:2375 -H unix://var/run/docker.sock**`<br />这两个url允许外部程序访问docker的API
+```java
+95  sudo vim /lib/systemd/system/docker.service
+   96  systemctl daemon-reload
+   97  service docker restart
+   98  systemctl status docker.service
+   99  firewall-cmd --permanent --add-port=2375/tcp
+  100  sudo apt install firewalld
+  101  firewall-cmd --permanent --add-port=2375/tcp
+  102  firewall-cmd --reload
+```
+maven 依赖
+```xml
+  <!--docker client begin-->
+        <dependency>
+            <groupId>com.github.docker-java</groupId>
+            <artifactId>docker-java</artifactId>
+            <version>3.0.14</version>
+        </dependency>
+        <dependency>
+            <groupId>javax.ws.rs</groupId>
+            <artifactId>javax.ws.rs-api</artifactId>
+            <version>2.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish.jersey.inject</groupId>
+            <artifactId>jersey-hk2</artifactId>
+            <version>2.26</version>
+        </dependency>
+<!--docker client end-->
+```
+编写java程序
+```java
+ public static void main(String[] args) {
+// 连接docker服务器
+        DockerClient dockerClient = DockerClientBuilder
+                .getInstance("tcp://192.168.70.130:2375").build();
+
+        // 获取服务器信息
+        Info info = dockerClient.infoCmd().exec();
+        String infoStr = JSONUtil.toJsonStr(info);
+        System.out.println(infoStr);
+    }
+```
+```java
+2 < 200
+2 < Api-Version: 1.45
+2 < Content-Length: -1
+2 < Content-Type: application/json
+2 < Date: Tue, 16 Apr 2024 05:37:47 GMT
+2 < Docker-Experimental: false
+2 < Ostype: linux
+2 < Server: Docker/26.0.1 (linux)
+2 < Transfer-Encoding: chunked
+{"ID":"e0b1a727-f5ec-4427-b328-435208433dfe","Containers":0,"ContainersRunning":0,"ContainersPaused":0,"ContainersStopped":0,"Images":0,"Driver":"overlay2","DriverStatus":[["Backing Filesystem","extfs"],["Supports d_type","true"],["Using metacopy","false"],["Native Overlay Diff","true"],["userxattr","false"]],"Plugins":{"Volume":["local"],"Network":["bridge","host","ipvlan","macvlan","null","overlay"],"Authorization":null,"Log":["awslogs","fluentd","gcplogs","gelf","journald","json-file","local","splunk","syslog"]},"MemoryLimit":true,"SwapLimit":true,"CpuCfsPeriod":true,"CpuCfsQuota":true,"CPUShares":true,"CPUSet":true,"PidsLimit":true,"IPv4Forwarding":true,"BridgeNfIptables":true,"BridgeNfIp6tables":true,"Debug":false,"NFd":25,"OomKillDisable":false,"NGoroutines":42,"SystemTime":"2024-04-16T13:37:40.965237557+08:00","LoggingDriver":"json-file","CgroupDriver":"systemd","CgroupVersion":"2","NEventsListener":0,"KernelVersion":"6.5.0-27-generic","OperatingSystem":"Ubuntu 22.04.4 LTS","OSVersion":"22.04","OSType":"linux","Architecture":"x86_64","IndexServerAddress":"https://index.docker.io/v1/","RegistryConfig":{"AllowNondistributableArtifactsCIDRs":null,"AllowNondistributableArtifactsHostnames":null,"InsecureRegistryCIDRs":["127.0.0.0/8"],"IndexConfigs":{"docker.io":{"Name":"docker.io","Mirrors":[],"Secure":true,"Official":true}},"Mirrors":null},"NCPU":2,"MemTotal":2015797248,"GenericResources":null,"DockerRootDir":"/var/lib/docker","HttpProxy":"","HttpsProxy":"","NoProxy":"","Name":"lily-virtual-machine","Labels":[],"ExperimentalBuild":false,"ServerVersion":"26.0.1","Runtimes":{"io.containerd.runc.v2":{"path":"runc","status":{"org.opencontainers.runtime-spec.features":"{\"ociVersionMin\":\"1.0.0\",\"ociVersionMax\":\"1.0.2-dev\",\"hooks\":[\"prestart\",\"createRuntime\",\"createContainer\",\"startContainer\",\"poststart\",\"poststop\"],\"mountOptions\":[\"acl\",\"async\",\"atime\",\"bind\",\"defaults\",\"dev\",\"diratime\",\"dirsync\",\"exec\",\"iversion\",\"lazytime\",\"loud\",\"mand\",\"noacl\",\"noatime\",\"nodev\",\"nodiratime\",\"noexec\",\"noiversion\",\"nolazytime\",\"nomand\",\"norelatime\",\"nostrictatime\",\"nosuid\",\"nosymfollow\",\"private\",\"ratime\",\"rbind\",\"rdev\",\"rdiratime\",\"relatime\",\"remount\",\"rexec\",\"rnoatime\",\"rnodev\",\"rnodiratime\",\"rnoexec\",\"rnorelatime\",\"rnostrictatime\",\"rnosuid\",\"rnosymfollow\",\"ro\",\"rprivate\",\"rrelatime\",\"rro\",\"rrw\",\"rshared\",\"rslave\",\"rstrictatime\",\"rsuid\",\"rsymfollow\",\"runbindable\",\"rw\",\"shared\",\"silent\",\"slave\",\"strictatime\",\"suid\",\"symfollow\",\"sync\",\"tmpcopyup\",\"unbindable\"],\"linux\":{\"namespaces\":[\"cgroup\",\"ipc\",\"mount\",\"network\",\"p
+
+```
+获取内存回调函数<br /> ![image.png](https://cdn.nlark.com/yuque/0/2024/png/1238904/1713317732046-6542866e-9a56-4859-b307-b8816600e917.png#averageHue=%232a333e&clientId=u5038ff9d-3d98-4&from=paste&height=394&id=u57ff06f4&originHeight=394&originWidth=663&originalType=binary&ratio=1.5&rotation=0&showTitle=false&size=83477&status=done&style=none&taskId=ub07b367f-413d-493b-bb01-c1d5341a92f&title=&width=663)<br />![image.png](https://cdn.nlark.com/yuque/0/2024/png/1238904/1713317800824-56183433-8079-4b31-8883-2b88cf6f6734.png#averageHue=%232a333d&clientId=u5038ff9d-3d98-4&from=paste&height=394&id=u5a67d7b4&originHeight=394&originWidth=979&originalType=binary&ratio=1.5&rotation=0&showTitle=false&size=169215&status=done&style=none&taskId=u05d39a74-68c5-4205-82b5-32be4a01548&title=&width=979)
+<a name="C5RpU"></a>
+### 直接使用docker编译执行
+```bash
+lily@lily-virtual-machine:~/oj-codeSandbox/execCode$ docker exec 5af9c3b31b87 javac /app/execCode/Main.java
+lily@lily-virtual-machine:~/oj-codeSandbox/execCode$ docker exec 5af9c3b31b87 ls /app/execCode
+Main.class
+Main.java
+c916edc6-70fd-490f-91f4-ca0b73633644
+dfdb2e65-fab9-45df-a19b-d131473c4832
+e352a4db-3046-4a9e-a576-b4ea414cc935
+lily@lily-virtual-machine:~/oj-codeSandbox/execCode$ docker exec 5af9c3b31b87 java -cp /app/execCode Main 2 3
+5
+Hello World!
+你好世界这是执行代码的输出结果
+
+```
+挂载对应目录<br />服务器：  `home/lily/oj-codeSandbox`<br />docker:  `/app`<br />编译命令：
+
+<a name="NwfMl"></a>
+# 改造微服务项目
+<a name="rEybT"></a>
+## 微服务划分
+<a name="gQh24"></a>
+### 业务模块
+
+1. 用户服务（lilyOj-user-service）:
+   1. 端口: 8102
+   2. 注册
+   3. 登录
+   4. 用户管理增删改查相关
+2. 题目服务(lilyOj-question-service)
+   1. port：8103
+   2. 题目相关增删改查
+   3. 在线做题
+   4. 题目提交
+3. 判题服务(lilyOj-judge-service)
+   1. prot：8104
+   2. 判题模块执行较重的操作
+   3. 执行判题逻辑
+   4. 错误处理
+   5. 开放接口（提供一个独立的新服务）
+<a name="tOdoI"></a>
+### 公共模块
+common 模块（lilyOj-common）：全局异常处理、请求响应封装类、公用工具类<br />model 模型模块(lilyOj-model)： 公用实体类<br />服务公共接口模块(lilyOj-service-client)：每个服务之间需要互相调用的接口
+<a name="K6blu"></a>
+### 依赖服务
+服务注册中心：nacos<br />微服务网关（lilyOj-gateway）：聚合所有的接口，统一接受处理前端的请求
+<a name="emQdd"></a>
+## 路由划分
+使用springboot的context-path统一修改各接口的前缀<br />inner : 服务内部之间互相调用，网关层面限制外部调用<br />用户服务：
+
+- /api/user
+- /api/user/inner : 服务内部之间互相调用，网关层面限制外部调用
+
+题目服务：
+
+- /api/question
+- /api/question/inner 
+
+判题服务：
+
+- /api/judge
+- /api/judge/inner
+<a name="yTh0m"></a>
+## 模块设计注意事项
+<a name="B5AFf"></a>
+### 业务模块
+
+1. 业务类需要application.yml配置，主类复制启动注解
+2. 业务层需要controller service mapper代码
+3. 主类添加包扫描（compoentScan ：把要使用的bean扫描注册到服务中，例如全局异常处理器，依赖于别的模块存在于com.lily包下）
+4. 保留service接口（对模块自身提供服务能力）
+<a name="sBNyg"></a>
+### 工具类模块
+工具类模块是为业务模块提供实体类等服务的，工具类模块应该尽量不依赖于其他的工具类模块，避免造成第三方业务模块添加依赖时发生工具类模块循环依赖现象<br />mapper.xml时mybatis提供的用于定义数据库字段与实体类属性映射关系的文件，可以放置在model模块下，方便定义时进行映射
+<a name="TJEK4"></a>
+### 父模块与子模块
+
+1. 父模块与子模块在pom.xml中应定义好子父依赖关系，在maven工具中可以查看子父模块是否成功绑定
+2. 父子模块使用的sdk应该是同一个版本甚至是同一个（进行编译运行操作），可以在project structure中对所有模块进行配置与修改
+<a name="aok1s"></a>
+## 网关设计
+<a name="cDwae"></a>
+## Nacos
+<a name="yMPYi"></a>
+### Nacos安装启动
+<a name="sabMb"></a>
+#### 安装
+由于spring cloud版本为2021.0.5 查询对应的Nacos版本（服务注册发现中，便于管理已注册的服务的）<br />**Nacos版本选择2.2.0版本**<br />**Nacos github下载地址：**[https://github.com/alibaba/nacos/releases/tag/2.2.0](https://github.com/alibaba/nacos/releases/tag/2.2.0)<br />nacos官网： [https://nacos.io/en/docs/v2/what-is-nacos/](https://nacos.io/en/docs/v2/what-is-nacos/)<br />下载对应版本后解压即可
+<a name="gDRJe"></a>
+#### 启动
+Nacos启动命令：<br />进入Nacos的安装目录的bin文件下<br />以standalone的形式启动Nacos，否则启动成功后会自行退出
+```bash
+E:\nacos-server-2.2.0\nacos\bin> startup.cmd -m standalone
+```
+Nacos程序启动后输入网址进入管理页面，默认账号密码均为 **nacos**
+```bash
+localhost:8848/nacos
+```
+<a name="zUHCo"></a>
+### 项目配置发现中心
+每个需要对外提供服务的业务模块在application.yml中添加配置
+```yaml
+ # 发现中心配置
+ spring:
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848
+# 路由的划分
+server:
+  address: 0.0.0.0
+  port: 8103
+  servlet:
+    context-path: /api/question
+```
+给业务服务项目启动类增加注解，开启服务发现、找到对应的客户端的Bean的位置<br />springboot开启支持OpenFeign调用<br />添加OpenFeign配置
+
+<a name="Fu2QC"></a>
+## Gateway模块网关配置
+
+<a name="ehxMp"></a>
+## service-client内部服务调用客户端整合
+
+
+<a name="fYTls"></a>
+## 依赖传递管理
+
+<a name="FIhl5"></a>
+## 包扫描
+
