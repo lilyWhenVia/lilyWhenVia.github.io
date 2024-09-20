@@ -66,3 +66,28 @@ SpringBoot默认的内嵌容器是Tomcat，也就是我们的程序实际上是�
 使用apifox模拟100个请求访问
 
 # 包扫描配置
+
+
+# 自定义Bean配置冲突
+
+如果定义的bean的名称与 `Configuration` 标注的类名相同, 该bean会被认为是自定义的bean工厂, 从而spring启动报错
+
+修复方法: 
+1. 修改方法名称与类名不同
+2. 给bean添加指定名称, 使得这个bean名称与类名不同, 就不会引发两个bean名称的冲突
+
+```java
+@Configuration  
+public class IdContext {  
+  
+//    @Bean("customIdContext")  
+    @Bean  
+    public Map<Constants.Ids, IIdGenerator> idGeneratorMap(SnowFlake snowFlake, ShortCode shortCode, RandomNumber randomNumber) {  
+        Map<Constants.Ids, IIdGenerator> idMap = new HashMap<>(8);  
+        idMap.put(Constants.Ids.SNOWFLAKE, snowFlake);  
+        idMap.put(Constants.Ids.SHORTCODE, shortCode);  
+        idMap.put(Constants.Ids.RANDOMNUMBER, randomNumber);  
+        return idMap;  
+    }  
+}
+```
