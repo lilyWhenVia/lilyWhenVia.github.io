@@ -1,13 +1,14 @@
 ---
-    layout:     post
-    title:      Stream Api
-    date:       2023-04-07
-    author:     lily
-    header-img: img/JAVASE.jpg
-    catalog: 	 true
-    tags:       JAVASE
+layout: post
+title: "Stream Api"
+subtitle: "Stream Api"
+date: 2023-04-07 00:00
+author: "lily"
+header-img: "img/JAVASE.jpg"
+catalog: true
+tags:
+  - "JAVASE"
 ---
-
 <a name="G6alI"></a>
 # 简介
 1. Stream 和 Collection 集合的区别：

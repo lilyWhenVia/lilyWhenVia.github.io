@@ -1,15 +1,14 @@
 ---
-layout:     post
-title:      2024-07-20-基于SpringSecurity和JWT的SSO
-subtitle:   2024-07-20-基于SpringSecurity和JWT的SSO
-date:       2024-09-21 21:30
-author:     lily
-header-img: img/springSecurity.jpg
-catalog:    true
+layout: post
+title: "SSO原理"
+subtitle: "2024-07-20-基于SpringSecurity和JWT的SSO"
+date: 2024-07-20 00:00
+author: "lily"
+header-img: "img/springSecurity.jpg"
+catalog: true
 tags:
-    - springSecurity
+  - "springSecurity"
 ---
-
 参考文章：
 1. [单点登录SSO解决方案之SpringSecurity+JWT实现](https://juejin.cn/post/6990362572788596749)
 # SSO原理

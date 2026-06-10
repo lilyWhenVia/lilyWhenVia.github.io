@@ -1,13 +1,14 @@
 ---
-    layout:     post
-    title:      Collections_Map-集合_泛型
-    date:       2023-04-07
-    author:     lily
-    header-img: img/JAVASE.jpg
-    catalog: 	 true
-    tags:       JAVASE
+layout: post
+title: "Collections_Map-集合_泛型"
+subtitle: "Collections_Map-集合_泛型"
+date: 2023-04-07 00:00
+author: "lily"
+header-img: "img/JAVASE.jpg"
+catalog: true
+tags:
+  - "JAVASE"
 ---
-
 <a name="xRA9n"></a>
 # 接口概述
 1. collections作为接口提供了java内部相关数据结构的方法规范

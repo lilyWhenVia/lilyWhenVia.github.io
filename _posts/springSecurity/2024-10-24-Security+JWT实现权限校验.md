@@ -1,15 +1,14 @@
 ---
-layout:     post
-title:      2024-10-24-Security+JWT实现SSO
-subtitle:   2024-10-24-Security+JWT实现SSO
-date:       2024-10-24 11:38
-author:     lily
-header-img: img/springSecurity.jpg
-catalog:    true
+layout: post
+title: "RSA+AES加密算法"
+subtitle: "2024-10-24-Security+JWT实现SSO"
+date: 2024-10-24 00:00
+author: "lily"
+header-img: "img/springSecurity.jpg"
+catalog: true
 tags:
-    - springSecurity
+  - "springSecurity"
 ---
-
 参考文章：
 1. [官方github地址文档](https://github.com/chaooo/spring-security-jwt)
 2. 

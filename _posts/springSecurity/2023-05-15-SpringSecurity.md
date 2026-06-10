@@ -1,13 +1,13 @@
 ---
-layout:     post
-title:      SpringSecurity
-subtitle:   SpringSecurity基础
-date:       2023-05-15
-author:     lily
-header-img: img/springSecurity.jpg
-catalog:    true
+layout: post
+title: "SpringSecurity"
+subtitle: "SpringSecurity基础"
+date: 2023-05-15 00:00
+author: "lily"
+header-img: "img/springSecurity.jpg"
+catalog: true
 tags:
-    - springSecurity
+  - "springSecurity"
 ---
 # spring security 
 <!-- 目录 -->

@@ -1,13 +1,14 @@
 ---
-    layout:     post
-    title:      SpringFramework
-    date:       2023-04-07
-    author:     lily
-    header-img: img/Spring.jpg
-    catalog: 	 true
-    tags:       Spring
+layout: post
+title: "SpringFramework"
+subtitle: "SpringFramework"
+date: 2023-04-07 00:00
+author: "lily"
+header-img: "img/Spring.jpg"
+catalog: true
+tags:
+  - "Spring"
 ---
-
 # Spring简介
 ## Spring是什么
 **是一个轻量级的控制反转（IoC）和面向切面（AOP）的容器框架。**

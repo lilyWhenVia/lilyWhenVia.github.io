@@ -1,13 +1,14 @@
 ---
-    layout:     post
-    title:      Spring-Mybatis
-    date:       2023-04-07
-    author:     lily
-    header-img: img/Spring.jpg
-    catalog: 	 true
-    tags:       Spring
+layout: post
+title: "Spring-Mybatis"
+subtitle: "Spring-Mybatis"
+date: 2023-04-07 00:00
+author: "lily"
+header-img: "img/Spring.jpg"
+catalog: true
+tags:
+  - "Spring"
 ---
-
 # 数据库概念
 > 数据库
 > 数据库是一个容器，包含了很多数据，当然这些数据可能存在不同的小容器(表)里面。

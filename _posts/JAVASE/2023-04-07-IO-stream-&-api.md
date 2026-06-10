@@ -1,13 +1,14 @@
 ---
-    layout:     post
-    title:      IO stream & api
-    date:       2023-04-07
-    author:     lily
-    header-img: img/JAVASE.jpg
-    catalog: 	 true
-    tags:       JAVASE
+layout: post
+title: "IO stream & api"
+subtitle: "IO stream & api"
+date: 2023-04-07 00:00
+author: "lily"
+header-img: "img/JAVASE.jpg"
+catalog: true
+tags:
+  - "JAVASE"
 ---
-
 1. file类：创建磁盘中指定文件或文件夹的java对象
 2. 四个输入输出/字符字节流的抽象基类
    1. **InputStream/OutputStream**  **字节流byte**

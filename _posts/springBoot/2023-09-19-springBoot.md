@@ -1,3 +1,13 @@
+---
+layout: post
+title: "springboot默认配置"
+subtitle: "springboot默认配置"
+date: 2023-09-19 00:00
+author: "lily"
+catalog: true
+tags:
+  - "springBoot"
+---
 # springboot默认配置
 ## ComponentScan与MapperScan
 @ComponentScan是SpringBoot的注解，如其意“Sacn”是扫描的意思。

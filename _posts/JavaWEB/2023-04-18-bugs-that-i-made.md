@@ -1,3 +1,13 @@
+---
+layout: post
+title: "Mybatis & jdbc & mysql"
+subtitle: "Mybatis & jdbc & mysql"
+date: 2023-04-18 00:00
+author: "lily"
+catalog: true
+tags:
+  - "JavaWEB"
+---
 <a name="RrIEy"></a>
 # Mybatis & jdbc & mysql
 1. MYSQL 登录 erro 1045  --- 忘记密码/密码错误

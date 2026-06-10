@@ -1,13 +1,13 @@
 ---
-layout:     post
-title:      SpringMVC
-subtitle:   MVC.md
-date:       2023-04-08
-author:     lily
-header-img: img/Spring.jpg
-catalog:    true
+layout: post
+title: "SpringMVC"
+subtitle: "MVC.md"
+date: 2023-04-08 00:00
+author: "lily"
+header-img: "img/Spring.jpg"
+catalog: true
 tags:
-    - Spring
+  - "Spring"
 ---
 # SpringMVC
 目录

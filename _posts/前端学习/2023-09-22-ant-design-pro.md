@@ -1,13 +1,13 @@
 ---
-layout:     post
-title:      2023-09-22-ant-design-pro
-subtitle:   2023-09-22-ant-design-pro
-date:       2023-09-22 11:08
-author:     lily
-header-img: img/前端学习.jpg
-catalog:    true
+layout: post
+title: "yarn"
+subtitle: "2023-09-22-ant-design-pro"
+date: 2023-09-22 00:00
+author: "lily"
+header-img: "img/前端学习.jpg"
+catalog: true
 tags:
-    - 前端学习
+  - "前端学习"
 ---
 # yarn
 ## 关于yarn tyarn npm cnpm的区别

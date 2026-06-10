@@ -1,13 +1,14 @@
 ---
-    layout:     post
-    title:      maven & tomcat
-    date:       2023-04-07
-    author:     lily
-    header-img: img/JavaWEB.jpg
-    catalog: 	 true
-    tags:       JavaWEB
+layout: post
+title: "maven & tomcat"
+subtitle: "maven & tomcat"
+date: 2023-04-07 00:00
+author: "lily"
+header-img: "img/JavaWEB.jpg"
+catalog: true
+tags:
+  - "JavaWEB"
 ---
-
 # Maven
 1. maven 是一个java项目管理工具，里面含有很多相关的帮助插件,其中maven helper可以帮助更方便的一键编译运行maven项目等
 2. maven编译,多次编译会覆盖原有的项目内文件.若文件存在,新编译文件会覆盖,但不会删除已存在文件

@@ -1,3 +1,13 @@
+---
+layout: post
+title: "yarn"
+subtitle: "yarn"
+date: 2025-05-09 00:00
+author: "lily"
+catalog: true
+tags:
+  - "前端学习"
+---
 # yarn
 ## 关于yarn tyarn npm cnpm的区别
 1. npm是nodejs的包管理工具，yarn是facebook开发的另一个包管理工具，tyarn是yarn的国内镜像（taobao镜像源），cnpm是npm的国内镜像。

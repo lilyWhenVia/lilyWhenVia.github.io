@@ -1,15 +1,14 @@
 ---
-layout:     post
-title:      2024-11-10-浅谈Zookeeper
-subtitle:   2024-11-10-浅谈Zookeeper
-date:       2024-11-10 09:43
-author:     lily
-header-img: img/中间件.jpg
-catalog:    true
+layout: post
+title: "ZK实现分布式锁"
+subtitle: "2024-11-10-浅谈Zookeeper"
+date: 2024-11-10 00:00
+author: "lily"
+header-img: "img/中间件.jpg"
+catalog: true
 tags:
-    - 中间件
+  - "中间件"
 ---
-
 [聊聊分布式锁 (qq.com)](https://mp.weixin.qq.com/s/-N4x6EkxwAYDGdJhwvmZLw)---字节跳动谈分布式锁
 
 ## ZK实现分布式锁

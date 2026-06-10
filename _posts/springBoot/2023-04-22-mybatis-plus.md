@@ -1,3 +1,13 @@
+---
+layout: post
+title: "mybatis-plus简介"
+subtitle: "mybatis-plus简介"
+date: 2023-04-22 00:00
+author: "lily"
+catalog: true
+tags:
+  - "springBoot"
+---
 <!-- 目录 -->
 [mybatis-plus简介](#mybatis-plus简介)
 [mybatis-plus与mybatis的区别](#mybatis-plus与mybatis的区别)
@@ -193,7 +203,7 @@ mybatis spring boot starter的版本选择要求与MyBatis、MyBatis-Spring、Ja
 
 # 默认配置
 
-​当使用 MyBatis-Plus 时，它会默认给实体类的字段进行驼峰式到下划线的转换，以生成对应的表字段名。例如，实体类中的 `private String userName` 字段会被自动转换成 `user_name` 字段名。
+当使用 MyBatis-Plus 时，它会默认给实体类的字段进行驼峰式到下划线的转换，以生成对应的表字段名。例如，实体类中的 `private String userName` 字段会被自动转换成 `user_name` 字段名。
 
 此外，MyBatis-Plus 还提供了全局配置和注解配置两种方式来控制表名和表字段的映射关系。以下是默认的一些配置：
 

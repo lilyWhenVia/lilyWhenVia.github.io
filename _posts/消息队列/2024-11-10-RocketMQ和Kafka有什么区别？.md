@@ -1,15 +1,14 @@
 ---
-layout:     post
-title:      2024-11-10-RocketMQ和Kafka有什么区别？
-subtitle:   2024-11-10-RocketMQ和Kafka有什么区别？
-date:       2024-11-10 09:59
-author:     lily
-header-img: img/消息队列.jpg
-catalog:    true
+layout: post
+title: "RocketMQ 是什么？"
+subtitle: "2024-11-10-RocketMQ和Kafka有什么区别？"
+date: 2024-11-10 00:00
+author: "lily"
+header-img: "img/消息队列.jpg"
+catalog: true
 tags:
-    - 消息队列
+  - "消息队列"
 ---
-
 作为一个程序员，假设你有 A、B 两个服务，A 服务发出消息后，不想让 B 服务**立马**处理到。而是要**过半小时**才让 B 服务处理到，该怎么实现？
 
 这类延迟处理消息的场景非常常见，举个例子，比如我每天早上到公司后都会点个外卖，我希望外卖能在中午送过来，而不是立马送过来，这就需要将外卖消息经过延时后，再投递到商家侧。

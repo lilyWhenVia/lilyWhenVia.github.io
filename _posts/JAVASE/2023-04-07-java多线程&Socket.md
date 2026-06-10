@@ -1,13 +1,14 @@
 ---
-    layout:     post
-    title:      java多线程&Socket
-    date:       2023-04-07
-    author:     lily
-    header-img: img/JAVASE.jpg
-    catalog: 	 true
-    tags:       JAVASE
+layout: post
+title: "java多线程&Socket"
+subtitle: "java多线程&Socket"
+date: 2023-04-07 00:00
+author: "lily"
+header-img: "img/JAVASE.jpg"
+catalog: true
+tags:
+  - "JAVASE"
 ---
-
 1. 程序、进程、线程
 2. 线程的创建
    1. 继承Thread类
