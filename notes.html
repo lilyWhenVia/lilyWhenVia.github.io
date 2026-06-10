@@ -12,6 +12,32 @@ permalink: /notes/
     padding-bottom: 88px;
   }
 
+  .notes-backdrop {
+    margin-top: -20px;
+    background: #222 no-repeat center top;
+    background-size: cover;
+    background-attachment: fixed;
+    position: relative;
+  }
+
+  .notes-backdrop::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba(255, 255, 255, .22);
+  }
+
+  .notes-backdrop .container {
+    position: relative;
+    z-index: 1;
+  }
+
+  .notes-surface {
+    background: rgba(255, 255, 255, .92);
+    padding: 34px 42px 46px;
+    box-shadow: 0 22px 70px rgba(0, 0, 0, .14);
+  }
+
   .notes-toolbar {
     margin-bottom: 28px;
     padding-bottom: 24px;
@@ -133,6 +159,22 @@ permalink: /notes/
   .notes-list .note-divider {
     display: none;
   }
+
+  @media only screen and (max-width: 767px) {
+    .notes-backdrop {
+      margin-top: 0;
+      background-attachment: scroll;
+    }
+
+    .notes-page {
+      padding-top: 28px;
+      padding-bottom: 50px;
+    }
+
+    .notes-surface {
+      padding: 24px 18px 34px;
+    }
+  }
 </style>
 
 <!-- Page Header -->
@@ -149,9 +191,10 @@ permalink: /notes/
   </div>
 </header>
 
-<div class="container notes-page">
-  <div class="row">
-    <div class="col-lg-10 col-lg-offset-1 col-md-12">
+<div class="notes-backdrop" style="background-image: url('{{ site.baseurl }}/{% if page.header-img %}{{ page.header-img }}{% else %}{{ site.header-img }}{% endif %}')">
+  <div class="container notes-page">
+    <div class="row">
+      <div class="col-lg-10 col-lg-offset-1 col-md-12 notes-surface">
       <div class="notes-toolbar">
         <input class="notes-search" id="notesSearch" type="search" placeholder="Search notes by title, subtitle, or tag" aria-label="Search notes">
         <div class="notes-filters" id="notesFilters">
@@ -200,6 +243,7 @@ permalink: /notes/
       </div>
 
       <div class="notes-empty" id="notesEmpty">No notes match this filter.</div>
+      </div>
     </div>
   </div>
 </div>
