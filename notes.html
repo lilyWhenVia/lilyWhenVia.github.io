@@ -13,15 +13,9 @@ permalink: /notes/
   }
 
   .notes-toolbar {
-    position: sticky;
-    top: 64px;
-    z-index: 3;
-    margin-bottom: 28px;
-    padding: 18px;
-    border: 1px solid #e7e7e7;
-    background: rgba(255, 255, 255, 0.96);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
-    backdrop-filter: blur(10px);
+    margin-bottom: 26px;
+    padding-bottom: 22px;
+    border-bottom: 1px solid #eee;
   }
 
   .notes-search {
@@ -29,8 +23,8 @@ permalink: /notes/
     height: 44px;
     margin-bottom: 14px;
     padding: 0 14px;
-    border: 2px solid #111;
-    border-radius: 0;
+    border: 1px solid #ddd;
+    border-radius: 2px;
     color: #111;
     font-size: 15px;
     outline: none;
@@ -43,9 +37,9 @@ permalink: /notes/
   }
 
   .notes-filter {
-    border: 1px solid #111;
+    border: 1px solid #bbb;
     background: #fff;
-    color: #111;
+    color: #777;
     padding: 6px 12px;
     font-size: 12px;
     font-weight: 700;
@@ -57,6 +51,7 @@ permalink: /notes/
   .notes-filter.is-active {
     background: #111;
     color: #fff;
+    border-color: #111;
   }
 
   .notes-count {
@@ -65,59 +60,11 @@ permalink: /notes/
     font-size: 13px;
   }
 
-  .notes-grid {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 18px;
-  }
-
-  .note-card {
-    min-height: 180px;
-    padding: 22px;
-    border: 2px solid #111;
-    background: #fff;
-    box-shadow: 7px 7px 0 #111;
-    transition: transform 0.16s ease, box-shadow 0.16s ease;
-  }
-
-  .note-card:hover {
-    transform: translate(-2px, -2px);
-    box-shadow: 10px 10px 0 #111;
-  }
-
-  .note-card a,
-  .note-card a:hover,
-  .note-card a:focus {
-    color: inherit;
-    text-decoration: none;
-  }
-
-  .note-date {
-    color: #777;
-    font-size: 12px;
-    font-weight: 700;
-    text-transform: uppercase;
-  }
-
-  .note-title {
-    margin: 10px 0 8px;
-    color: #111;
-    font-size: 22px;
-    line-height: 1.25;
-    font-weight: 800;
-  }
-
-  .note-subtitle {
-    margin-bottom: 14px;
-    color: #555;
-    font-size: 14px;
-    line-height: 1.6;
-  }
-
   .note-tags {
     display: flex;
     flex-wrap: wrap;
     gap: 6px;
+    margin-top: 10px;
   }
 
   .note-tag {
@@ -138,18 +85,8 @@ permalink: /notes/
     text-align: center;
   }
 
-  @media (max-width: 768px) {
-    .notes-toolbar {
-      position: static;
-    }
-
-    .notes-grid {
-      grid-template-columns: 1fr;
-    }
-
-    .note-card {
-      box-shadow: 5px 5px 0 #111;
-    }
+  .notes-list .post-preview {
+    margin-top: 0;
   }
 </style>
 
@@ -184,22 +121,28 @@ permalink: /notes/
         <div class="notes-count"><span id="notesVisibleCount">{{ site.posts | size }}</span> / {{ site.posts | size }} notes</div>
       </div>
 
-      <div class="notes-grid" id="notesGrid">
+      <div class="notes-list" id="notesGrid">
         {% for post in site.posts %}
-        <article class="note-card" data-tags="{{ post.tags | join: ',' | escape }}" data-text="{{ post.title | append: ' ' | append: post.subtitle | append: ' ' | append: post.tags | join: ' ' | strip_html | escape }}">
+        <article class="note-item post-preview" data-tags="{{ post.tags | join: ',' | escape }}" data-text="{{ post.title | append: ' ' | append: post.subtitle | append: ' ' | append: post.tags | join: ' ' | strip_html | escape }}">
           <a href="{{ post.url | prepend: site.baseurl }}">
-            <time class="note-date" datetime="{{ post.date | date: '%Y-%m-%d' }}">{{ post.date | date: "%Y-%m-%d" }}</time>
-            <h2 class="note-title">{{ post.title }}</h2>
+            <h2 class="post-title">{{ post.title }}</h2>
             {% if post.subtitle %}
-            <div class="note-subtitle">{{ post.subtitle }}</div>
+            <h3 class="post-subtitle">{{ post.subtitle }}</h3>
             {% endif %}
+            <div class="post-content-preview">
+              {{ post.content | strip_html | truncate:200 }}
+            </div>
             <div class="note-tags">
               {% for tag in post.tags limit:6 %}
               <span class="note-tag">{{ tag }}</span>
               {% endfor %}
             </div>
           </a>
+          <p class="post-meta">
+            Posted by {% if post.author %}{{ post.author }}{% else %}{{ site.title }}{% endif %} on {{ post.date | date: "%B %-d, %Y" }}
+          </p>
         </article>
+        <hr class="note-divider">
         {% endfor %}
       </div>
 
@@ -212,7 +155,7 @@ permalink: /notes/
   (function () {
     var search = document.getElementById('notesSearch');
     var filters = document.getElementById('notesFilters');
-    var cards = Array.prototype.slice.call(document.querySelectorAll('.note-card'));
+    var cards = Array.prototype.slice.call(document.querySelectorAll('.note-item'));
     var count = document.getElementById('notesVisibleCount');
     var empty = document.getElementById('notesEmpty');
     var activeTag = 'all';
