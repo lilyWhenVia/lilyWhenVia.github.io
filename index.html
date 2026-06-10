@@ -1,30 +1,77 @@
 ---
-layout: page
+layout: default
 description: "Thinking will not overcome fear but action will."
+header-img: "img/post-bg-desk.jpg"
 ---
 
-{% assign home_note_count = 0 %}
-{% for post in site.posts %}
-{% if post.home == true or post.tags contains "首页展示" %}
-{% assign home_note_count = home_note_count | plus: 1 %}
-<div class="post-preview">
-    <a href="{{ post.url | prepend: site.baseurl }}">
-        <h2 class="post-title">
-            {{ post.title }}
-        </h2>
-        {% if post.subtitle %}
-        <h3 class="post-subtitle">
-            {{ post.subtitle }}
-        </h3>
-        {% endif %}
-        <div class="post-content-preview">
-            {{ post.content | strip_html | truncate:200 }}
+<header class="intro-header home-hero" style="background-image: url('{{ site.baseurl }}/{% if page.header-img %}{{ page.header-img }}{% else %}{{ site.header-img }}{% endif %}')">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+        <div class="site-heading">
+          <h1>{{ site.title }}</h1>
+          <span class="subheading">{{ page.description }}</span>
         </div>
-    </a>
-    <p class="post-meta">
-        Posted by {% if post.author %}{{ post.author }}{% else %}{{ site.title }}{% endif %} on {{ post.date | date: "%B %-d, %Y" }}
-    </p>
-</div>
-<hr>
-{% endif %}
-{% endfor %}
+      </div>
+    </div>
+  </div>
+</header>
+
+<main class="home-page">
+  <section class="home-intro">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+          <p class="home-kicker">About Lily</p>
+          <h2>记录工程、成长和一点点生活里的长期主义。</h2>
+          <p>
+            我是 Lily。这里会放我希望被外部读者先看到的文章：技术之外的思考、项目复盘、学习方法、表达练习，以及一些正在形成中的个人观察。
+          </p>
+          <div class="home-actions">
+            <a href="{{ site.baseurl }}/articles/">Read Articles</a>
+            <a href="{{ site.baseurl }}/notes/">Browse Notes</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="home-articles">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+          <div class="section-title-row">
+            <h2>Articles</h2>
+            <a href="{{ site.baseurl }}/articles/">View all</a>
+          </div>
+
+          {% assign article_count = 0 %}
+          {% for post in site.posts %}
+          {% if post.categories contains "article" or post.categories contains "articles" or post.tags contains "Article" or post.tags contains "文章" %}
+          {% assign article_count = article_count | plus: 1 %}
+          {% if article_count <= 5 %}
+          <article class="article-row">
+            <a href="{{ post.url | prepend: site.baseurl }}">
+              <span class="article-date">{{ post.date | date: "%Y.%m.%d" }}</span>
+              <h3>{{ post.title }}</h3>
+              {% if post.subtitle %}
+              <p>{{ post.subtitle }}</p>
+              {% else %}
+              <p>{{ post.content | strip_html | truncate:90 }}</p>
+              {% endif %}
+            </a>
+          </article>
+          {% endif %}
+          {% endif %}
+          {% endfor %}
+
+          {% if article_count == 0 %}
+          <div class="empty-note">
+            Article 空间已经准备好。之后把想展示在首页的文章放到 <code>_posts/article/</code>，或在 front matter 里加入 <code>categories: [article]</code>。
+          </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </section>
+</main>

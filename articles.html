@@ -1,0 +1,52 @@
+---
+title: Articles
+layout: default
+description: "Selected essays and public-facing writing."
+header-img: "img/post-bg-coffee.jpeg"
+permalink: /articles/
+---
+
+<header class="intro-header" style="background-image: url('{{ site.baseurl }}/{% if page.header-img %}{{ page.header-img }}{% else %}{{ site.header-img }}{% endif %}')">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+        <div class="site-heading">
+          <h1>{{ page.title }}</h1>
+          <span class="subheading">{{ page.description }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main class="archive-page">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+        {% assign article_count = 0 %}
+        {% for post in site.posts %}
+        {% if post.categories contains "article" or post.categories contains "articles" or post.tags contains "Article" or post.tags contains "文章" %}
+        {% assign article_count = article_count | plus: 1 %}
+        <article class="article-row">
+          <a href="{{ post.url | prepend: site.baseurl }}">
+            <span class="article-date">{{ post.date | date: "%Y.%m.%d" }}</span>
+            <h2>{{ post.title }}</h2>
+            {% if post.subtitle %}
+            <p>{{ post.subtitle }}</p>
+            {% else %}
+            <p>{{ post.content | strip_html | truncate:120 }}</p>
+            {% endif %}
+          </a>
+        </article>
+        {% endif %}
+        {% endfor %}
+
+        {% if article_count == 0 %}
+        <div class="empty-note">
+          暂时还没有公开 Article。之后把文章放到 <code>_posts/article/</code>，或在 front matter 里加入 <code>categories: [article]</code>。
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</main>

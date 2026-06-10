@@ -38,14 +38,14 @@ layout: default
                     <!-- no hr -->
                     <h5><a href="{{'/tags/' | prepend: site.baseurl }}">FEATURED TAGS</a></h5>
                     <div class="tags">
-        				{% for tag in site.tags %}
-                            {% if tag[1].size > site.featured-condition-size %}
-                				<a href="{{ site.baseurl }}/tags/#{{ tag[0] }}" title="{{ tag[0] }}" rel="{{ tag[1].size }}">
-                                    {{ tag[0] }}
+                        {% for tag_name in site.featured_tag_names %}
+                            {% if site.tags[tag_name] %}
+                                <a href="{{ site.baseurl }}/tags/#{{ tag_name }}" title="{{ tag_name }}" rel="{{ site.tags[tag_name].size }}">
+                                    {{ tag_name }}
                                 </a>
                             {% endif %}
-        				{% endfor %}
-        			</div>
+                        {% endfor %}
+                    </div>
                 </section>
                 {% endif %}
 
@@ -87,10 +87,10 @@ layout: default
                     <hr class="hidden-sm hidden-xs">
                     <h5><a href="{{'/tags/' | prepend: site.baseurl }}">FEATURED TAGS</a></h5>
                     <div class="tags">
-                        {% for tag in site.tags %}
-                            {% if tag[1].size > site.featured-condition-size %}
-                                <a href="{{ site.baseurl }}/tags/#{{ tag[0] }}" title="{{ tag[0] }}" rel="{{ tag[1].size }}">
-                                    {{ tag[0] }}
+                        {% for tag_name in site.featured_tag_names %}
+                            {% if site.tags[tag_name] %}
+                                <a href="{{ site.baseurl }}/tags/#{{ tag_name }}" title="{{ tag_name }}" rel="{{ site.tags[tag_name].size }}">
+                                    {{ tag_name }}
                                 </a>
                             {% endif %}
                         {% endfor %}

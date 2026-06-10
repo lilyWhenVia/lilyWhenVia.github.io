@@ -8,26 +8,27 @@ permalink: /notes/
 
 <style>
   .notes-page {
-    padding-top: 40px;
-    padding-bottom: 72px;
+    padding-top: 56px;
+    padding-bottom: 88px;
   }
 
   .notes-toolbar {
-    margin-bottom: 26px;
-    padding-bottom: 22px;
-    border-bottom: 1px solid #eee;
+    margin-bottom: 28px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid #e8e8e8;
   }
 
   .notes-search {
     width: 100%;
-    height: 44px;
-    margin-bottom: 14px;
-    padding: 0 14px;
-    border: 1px solid #ddd;
-    border-radius: 2px;
+    height: 46px;
+    margin-bottom: 16px;
+    padding: 0 15px;
+    border: 1px solid #d9d9d9;
+    border-radius: 0;
     color: #111;
     font-size: 15px;
     outline: none;
+    box-shadow: none;
   }
 
   .notes-filters {
@@ -37,14 +38,13 @@ permalink: /notes/
   }
 
   .notes-filter {
-    border: 1px solid #bbb;
+    border: 1px solid #d3d3d3;
     background: #fff;
-    color: #777;
-    padding: 6px 12px;
+    color: #555;
+    padding: 6px 11px;
     font-size: 12px;
-    font-weight: 700;
+    font-weight: 600;
     letter-spacing: 0;
-    text-transform: uppercase;
     cursor: pointer;
   }
 
@@ -64,14 +64,14 @@ permalink: /notes/
     display: flex;
     flex-wrap: wrap;
     gap: 6px;
-    margin-top: 10px;
+    margin-top: 12px;
   }
 
   .note-tag {
     display: inline-block;
-    border: 1px solid #d0d0d0;
+    border: 1px solid #e0e0e0;
     padding: 3px 7px;
-    color: #555;
+    color: #666;
     font-size: 11px;
     line-height: 1.3;
   }
@@ -85,8 +85,53 @@ permalink: /notes/
     text-align: center;
   }
 
-  .notes-list .post-preview {
-    margin-top: 0;
+  .notes-list {
+    border-top: 1px solid #f0f0f0;
+  }
+
+  .notes-list .note-item {
+    margin: 0;
+    padding: 24px 0;
+    border-bottom: 1px solid #f0f0f0;
+  }
+
+  .notes-list .note-item > a {
+    color: #222;
+  }
+
+  .notes-list .note-item > a:hover {
+    color: #8a5a00;
+  }
+
+  .notes-list .note-item h2 {
+    margin: 0 0 8px;
+    font-size: 23px;
+    line-height: 1.35;
+    font-weight: 700;
+  }
+
+  .notes-list .note-item h3 {
+    margin: 0;
+    color: #666;
+    font-size: 15px;
+    line-height: 1.45;
+    font-weight: 400;
+  }
+
+  .notes-list .note-item .post-content-preview {
+    margin-top: 8px;
+    max-width: 68ch;
+  }
+
+  .notes-list .note-item .post-meta {
+    margin-top: 10px;
+    color: #8a8a8a;
+    font-size: 13px;
+    font-style: normal;
+  }
+
+  .notes-list .note-divider {
+    display: none;
   }
 </style>
 
@@ -118,11 +163,18 @@ permalink: /notes/
             {% endif %}
           {% endfor %}
         </div>
-        <div class="notes-count"><span id="notesVisibleCount">{{ site.posts | size }}</span> / {{ site.posts | size }} notes</div>
+        {% assign notes_count = 0 %}
+        {% for post in site.posts %}
+          {% unless post.categories contains "article" or post.categories contains "articles" or post.tags contains "Article" or post.tags contains "文章" %}
+            {% assign notes_count = notes_count | plus: 1 %}
+          {% endunless %}
+        {% endfor %}
+        <div class="notes-count"><span id="notesVisibleCount">{{ notes_count }}</span> / {{ notes_count }} notes</div>
       </div>
 
       <div class="notes-list" id="notesGrid">
         {% for post in site.posts %}
+        {% unless post.categories contains "article" or post.categories contains "articles" or post.tags contains "Article" or post.tags contains "文章" %}
         <article class="note-item post-preview" data-tags="{{ post.tags | join: ',' | escape }}" data-text="{{ post.title | append: ' ' | append: post.subtitle | append: ' ' | append: post.tags | join: ' ' | strip_html | escape }}">
           <a href="{{ post.url | prepend: site.baseurl }}">
             <h2 class="post-title">{{ post.title }}</h2>
@@ -143,6 +195,7 @@ permalink: /notes/
           </p>
         </article>
         <hr class="note-divider">
+        {% endunless %}
         {% endfor %}
       </div>
 
