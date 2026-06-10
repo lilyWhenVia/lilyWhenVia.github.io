@@ -7,6 +7,11 @@ author: "lily"
 header-img: "img/JavaWEB.jpg"
 catalog: true
 tags:
+  - "技术笔记"
+  - "后端开发"
+  - "Java"
+  - "开发工具"
+  - "JavaWeb"
   - "JavaWEB"
 ---
 # Maven

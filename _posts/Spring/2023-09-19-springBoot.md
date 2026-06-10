@@ -6,7 +6,11 @@ date: 2023-09-19 00:00
 author: "lily"
 catalog: true
 tags:
+  - "技术笔记"
+  - "后端开发"
+  - "Java"
   - "Spring"
+  - "SpringBoot"
 ---
 # springboot默认配置
 ## ComponentScan与MapperScan

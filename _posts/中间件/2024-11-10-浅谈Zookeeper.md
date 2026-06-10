@@ -7,7 +7,11 @@ author: "lily"
 header-img: "img/中间件.jpg"
 catalog: true
 tags:
+  - "技术笔记"
+  - "后端开发"
   - "中间件"
+  - "分布式"
+  - "Zookeeper"
 ---
 [聊聊分布式锁 (qq.com)](https://mp.weixin.qq.com/s/-N4x6EkxwAYDGdJhwvmZLw)---字节跳动谈分布式锁
 

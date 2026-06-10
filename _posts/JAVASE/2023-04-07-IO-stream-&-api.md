@@ -7,6 +7,9 @@ author: "lily"
 header-img: "img/JAVASE.jpg"
 catalog: true
 tags:
+  - "技术笔记"
+  - "后端开发"
+  - "Java"
   - "JAVASE"
 ---
 1. file类：创建磁盘中指定文件或文件夹的java对象

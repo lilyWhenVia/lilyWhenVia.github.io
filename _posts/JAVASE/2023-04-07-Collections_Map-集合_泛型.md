@@ -7,6 +7,10 @@ author: "lily"
 header-img: "img/JAVASE.jpg"
 catalog: true
 tags:
+  - "技术笔记"
+  - "后端开发"
+  - "Java"
+  - "数据结构"
   - "JAVASE"
 ---
 <a name="xRA9n"></a>

@@ -6,7 +6,12 @@ date: 2023-09-18 00:00
 author: "lily"
 catalog: true
 tags:
+  - "技术笔记"
+  - "后端开发"
+  - "Java"
   - "Spring"
+  - "SpringBoot"
+  - "MyBatis"
 ---
 # mybatis-plus在springboot中的使用
 

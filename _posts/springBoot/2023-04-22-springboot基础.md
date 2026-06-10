@@ -7,7 +7,10 @@ author: "lily"
 header-img: "img/springBoot.jpg"
 catalog: true
 tags:
-  - "springBoot"
+  - "技术笔记"
+  - "后端开发"
+  - "Java"
+  - "SpringBoot"
 ---
 # 基础配置
 

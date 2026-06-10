@@ -7,7 +7,11 @@ author: "lily"
 header-img: "img/springSecurity.jpg"
 catalog: true
 tags:
-  - "springSecurity"
+  - "技术笔记"
+  - "后端开发"
+  - "Java"
+  - "SpringSecurity"
+  - "计算机网络"
 ---
 参考文章：
 1. [单点登录SSO解决方案之SpringSecurity+JWT实现](https://juejin.cn/post/6990362572788596749)

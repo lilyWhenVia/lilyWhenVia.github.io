@@ -7,7 +7,11 @@ author: "lily"
 header-img: "img/Spring.jpg"
 catalog: true
 tags:
+  - "技术笔记"
+  - "后端开发"
+  - "Java"
   - "Spring"
+  - "MyBatis"
 ---
 # 数据库概念
 > 数据库

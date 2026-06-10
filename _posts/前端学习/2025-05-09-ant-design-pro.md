@@ -6,6 +6,8 @@ date: 2025-05-09 00:00
 author: "lily"
 catalog: true
 tags:
+  - "技术笔记"
+  - "前端"
   - "前端学习"
 ---
 # yarn

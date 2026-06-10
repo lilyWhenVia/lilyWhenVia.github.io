@@ -7,6 +7,8 @@ author: "lily"
 header-img: "img/前端学习.jpg"
 catalog: true
 tags:
+  - "技术笔记"
+  - "前端"
   - "前端学习"
 ---
 # yarn

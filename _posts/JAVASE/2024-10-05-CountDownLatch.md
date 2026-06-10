@@ -7,7 +7,11 @@ author: "lily"
 header-img: "img/JAVASE.jpg"
 catalog: true
 tags:
+  - "技术笔记"
+  - "后端开发"
+  - "Java"
   - "JAVASE"
+  - "Java并发"
 ---
 # 简介
 

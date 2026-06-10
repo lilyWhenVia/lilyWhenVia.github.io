@@ -6,7 +6,14 @@ date: 2023-04-18 00:00
 author: "lily"
 catalog: true
 tags:
-  - "JavaWEB"
+  - "技术笔记"
+  - "后端开发"
+  - "Java"
+  - "MySQL"
+  - "SQL"
+  - "问题排查"
+  - "JavaWeb"
+  - "MyBatis"
 ---
 <a name="RrIEy"></a>
 # Mybatis & jdbc & mysql

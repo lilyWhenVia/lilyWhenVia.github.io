@@ -7,7 +7,10 @@ author: "lily"
 header-img: "img/springSecurity.jpg"
 catalog: true
 tags:
-  - "springSecurity"
+  - "技术笔记"
+  - "后端开发"
+  - "Java"
+  - "SpringSecurity"
 ---
 # spring security 
 <!-- 目录 -->
